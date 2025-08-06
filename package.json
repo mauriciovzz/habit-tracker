@@ -5,16 +5,18 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "host": "vite --host",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@mantine/charts": "^8.2.3",
     "@mantine/core": "^8.2.3",
     "@mantine/form": "^8.2.3",
     "@mantine/hooks": "^8.2.3",
+    "@tabler/icons-react": "^3.34.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "recharts": "^3.1.1"
