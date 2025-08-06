@@ -7,7 +7,7 @@ import {
 } from "@mantine/core";
 import { IconGridDots, IconMoon, IconPlus, IconSun } from "@tabler/icons-react";
 
-export const Header = () => {
+export const Header = ({ openCreationModal }: { openCreationModal: () => void }) => {
   const { setColorScheme } = useMantineColorScheme();
   const computedColorScheme = useComputedColorScheme("light");
 
@@ -22,7 +22,7 @@ export const Header = () => {
       </Text>
 
       <Group gap="sm">
-        <ActionIcon variant="default" aria-label="AddHabit">
+        <ActionIcon variant="default" aria-label="AddHabit" onClick={openCreationModal}>
           <IconPlus style={{ width: "70%", height: "70%" }} stroke={1.5} />
         </ActionIcon>
         <ActionIcon variant="default" aria-label="ChangeHabitStyle">
