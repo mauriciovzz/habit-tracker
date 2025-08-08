@@ -2,9 +2,11 @@ import { AppShell } from "@mantine/core";
 import { Header } from "./Header";
 import { useDisclosure } from "@mantine/hooks";
 import { HabitCreationModal } from "../HabitCreationModal";
+import { useHabits } from "../../hooks/useHabits";
 
 export const Layout = () => {
   const [opened, { open, close }] = useDisclosure(false);
+  const { habits } = useHabits();
 
   return (
     <AppShell header={{ height: 60 }} padding="md">
@@ -13,8 +15,9 @@ export const Layout = () => {
       </AppShell.Header>
 
       <AppShell.Main>
-        Navbar is only visible on mobile, links that are rendered in the header on desktop are
-        hidden on mobile in header and rendered in navbar instead.
+        {habits.map((h) => (
+          <div key={h.id}>{h.name}</div>
+        ))}
       </AppShell.Main>
 
       <HabitCreationModal opened={opened} onClose={close} />

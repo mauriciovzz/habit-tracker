@@ -12,8 +12,9 @@ import {
   Flex,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import type { HabitCreationData } from "../types";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
+import type { HabitInfo } from "../types";
+import { useHabits } from "../hooks/useHabits";
 
 interface HabitCreationModalTypes {
   opened: boolean;
@@ -38,8 +39,19 @@ const colors = [
 ];
 
 export const HabitCreationModal = ({ opened, onClose }: HabitCreationModalTypes) => {
-  const addHabit = ({ name, color, reps }: HabitCreationData) => {
-    console.log(name, color, reps);
+  const { addHabit } = useHabits();
+
+  const resetFormValues = () => {
+    form.setValues({
+      name: "",
+      color: "#FF1A1A",
+      reps: 1,
+    });
+  };
+
+  const handleAddHabit = async ({ name, color, reps }: HabitInfo) => {
+    await addHabit({ name, color, reps });
+    resetFormValues();
   };
 
   const form = useForm({
@@ -52,7 +64,7 @@ export const HabitCreationModal = ({ opened, onClose }: HabitCreationModalTypes)
 
     validate: {
       name: (value) => (value.length > 70 ? "max length is 70" : null),
-      reps: (value) => (value < 1 || value > 50 ? "value must be between 1 and 50" : null),
+      reps: (value) => (value < 1 || value > 50 ? "value must be between 1 and 30" : null),
     },
   });
 
@@ -72,12 +84,7 @@ export const HabitCreationModal = ({ opened, onClose }: HabitCreationModalTypes)
   };
 
   const onModalClose = () => {
-    form.setValues({
-      name: "",
-      color: "#FF1A1A",
-      reps: 1,
-    });
-
+    resetFormValues();
     onClose();
   };
 
@@ -103,8 +110,8 @@ export const HabitCreationModal = ({ opened, onClose }: HabitCreationModalTypes)
 
         <Modal.Body>
           <form
-            onSubmit={form.onSubmit((values) => {
-              addHabit(values);
+            onSubmit={form.onSubmit(async (values) => {
+              await handleAddHabit(values);
             })}
           >
             <Stack>
