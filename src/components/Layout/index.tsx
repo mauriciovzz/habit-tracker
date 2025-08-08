@@ -1,8 +1,9 @@
-import { AppShell } from "@mantine/core";
+import { AppShell, Stack } from "@mantine/core";
 import { Header } from "./Header";
 import { useDisclosure } from "@mantine/hooks";
 import { HabitCreationModal } from "../HabitCreationModal";
 import { useHabits } from "../../hooks/useHabits";
+import { HeatmapHabit } from "../HeatmapHabit";
 
 export const Layout = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -15,9 +16,11 @@ export const Layout = () => {
       </AppShell.Header>
 
       <AppShell.Main>
-        {habits.map((h) => (
-          <div key={h.id}>{h.name}</div>
-        ))}
+        <Stack gap="md">
+          {habits.map((h) => (
+            <HeatmapHabit key={h.id} habit={h} />
+          ))}
+        </Stack>
       </AppShell.Main>
 
       <HabitCreationModal opened={opened} onClose={close} />
