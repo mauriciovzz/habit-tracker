@@ -5,15 +5,37 @@ import {
   useComputedColorScheme,
   useMantineColorScheme,
 } from "@mantine/core";
-import { IconGridDots, IconMoon, IconPlus, IconSun } from "@tabler/icons-react";
+import {
+  IconPlus,
+  IconCircleCheck,
+  IconFlame,
+  IconGridDots,
+  IconMoon,
+  IconSun,
+} from "@tabler/icons-react";
+import type { HabitStyle } from "../../types";
 
-export const Header = ({ openCreationModal }: { openCreationModal: () => void }) => {
+interface HeaderTypes {
+  openCreationModal: () => void;
+  habitStyle: HabitStyle;
+  toggleHabitStyle: () => void;
+}
+
+const iconMap = {
+  simple: IconFlame,
+  streak: IconGridDots,
+  heatmap: IconCircleCheck,
+};
+
+export const Header = ({ openCreationModal, habitStyle, toggleHabitStyle }: HeaderTypes) => {
   const { setColorScheme } = useMantineColorScheme();
   const computedColorScheme = useComputedColorScheme("light");
 
   const toggleColorScheme = () => {
     setColorScheme(computedColorScheme === "dark" ? "light" : "dark");
   };
+
+  const HabitStyleIcon = iconMap[habitStyle];
 
   return (
     <Group justify="space-between" h="100%" px="md">
@@ -25,8 +47,8 @@ export const Header = ({ openCreationModal }: { openCreationModal: () => void })
         <ActionIcon variant="default" aria-label="AddHabit" onClick={openCreationModal}>
           <IconPlus style={{ width: "70%", height: "70%" }} stroke={1.5} />
         </ActionIcon>
-        <ActionIcon variant="default" aria-label="ChangeHabitStyle">
-          <IconGridDots style={{ width: "70%", height: "70%" }} stroke={1.5} />
+        <ActionIcon variant="default" aria-label="ChangeHabitStyle" onClick={toggleHabitStyle}>
+          <HabitStyleIcon style={{ width: "70%", height: "70%" }} stroke={1.5} />
         </ActionIcon>
         <ActionIcon
           variant="default"

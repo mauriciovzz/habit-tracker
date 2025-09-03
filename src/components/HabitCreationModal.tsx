@@ -132,9 +132,8 @@ export const HabitCreationModal = ({ opened, onClose }: HabitCreationModalTypes)
                 <Grid w={305.5} columns={7} grow gutter="10">
                   {colors.map((hex) => {
                     return (
-                      <Grid.Col span={1}>
+                      <Grid.Col key={hex} span={1}>
                         <ColorSwatch
-                          key={hex}
                           color={hex}
                           size={35}
                           radius={10}

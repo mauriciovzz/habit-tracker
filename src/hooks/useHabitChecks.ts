@@ -18,7 +18,7 @@ export const useHabitChecks = (habitId: number) => {
   };
 
   const getTodayCheck = async (date: string) => {
-    return await db.habitChecks.where({ habitId: habitId, date: date }).first();
+    return await db.habitChecks.where({ habitId: habitId, date }).first();
   };
 
   const updateCheckCount = async ({ date, count }: { date: string; count: number }) => {
