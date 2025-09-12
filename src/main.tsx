@@ -3,6 +3,9 @@ import { createRoot } from "react-dom/client";
 import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
 import "@mantine/charts/styles.css";
+import "@mantine/dates/styles.css";
+
+import { HabitsProvider } from "./contexts/HabitsContext";
 
 import { App } from "./App.tsx";
 
@@ -11,7 +14,9 @@ if (rootElement) {
   createRoot(rootElement).render(
     <StrictMode>
       <MantineProvider>
-        <App />
+        <HabitsProvider>
+          <App />
+        </HabitsProvider>
       </MantineProvider>
     </StrictMode>
   );

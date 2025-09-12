@@ -1,4 +1,4 @@
-import type { HabitInfo, HabitStyle } from "../../types";
+import type { Habit, HabitStyle } from "../../types";
 import {
   Paper,
   Group,
@@ -11,9 +11,9 @@ import {
 } from "@mantine/core";
 import { Heatmap } from "@mantine/charts";
 import { ProgressButton } from "./ProgressButton";
-import { useHabitData } from "../../hooks/useHabitData";
 import { useHeatmapLayout } from "../../hooks/useHeatmapLayout";
-import { IconFlame, IconCrown, IconChecks } from "@tabler/icons-react";
+import { IconFlame, IconCrown, IconChecks, IconCheck } from "@tabler/icons-react";
+import { useHabits } from "../../contexts/HabitsContext";
 
 const iconMap = {
   current: IconFlame,
@@ -32,19 +32,27 @@ const StreakItem = ({ number, icon }: { number: number; icon: "current" | "best"
   );
 };
 
-interface HabitTypes {
-  habit: HabitInfo;
+interface HabitItemProps {
+  habit: Habit;
   habitStyle: HabitStyle;
+  date: string;
+  openHabit: () => void;
 }
 
-export const Habit = ({ habit, habitStyle }: HabitTypes) => {
-  const { checks, progress, updateProgress, isTodayComplete } = useHabitData(habit);
+export const HabitItem = ({ habit, habitStyle, date, openHabit }: HabitItemProps) => {
+  const { name, color, reps, currentStreak, bestStreak, logs } = habit;
+  const { updateLog } = useHabits();
 
+  const todayLog = logs.find((l) => l.date === date);
+  const count = todayLog?.count ?? 0;
+  const progress = (count / reps) * 100;
+  const isTodayComplete = progress >= 100;
+
+  // handle heatmap
   let heatmapData: Record<string, number> = {};
-  const completedCheks = checks.filter((key) => key.count === habit.reps);
+  const completedCheks = logs.filter((key) => key.count === reps);
   heatmapData = Object.fromEntries(completedCheks.map((key) => [key.date, 1]));
 
-  // handle heatmap size and responsiveness
   const rectSize = 12;
   const { ref, startDate, today, mapWidth } = useHeatmapLayout(rectSize);
 
@@ -53,22 +61,23 @@ export const Habit = ({ habit, habitStyle }: HabitTypes) => {
   const theme = useMantineTheme();
 
   const defaultBorderColor = colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3];
-  const borderColor = isTodayComplete ? habit.color : defaultBorderColor;
+  const borderColor = isTodayComplete ? color : defaultBorderColor;
 
   return (
-    <Paper p="xs" bd={`1px solid ${borderColor}`} bdrs="lg">
+    <Paper p="xs" bd={`1px solid ${borderColor}`} bdrs="lg" onClick={openHabit}>
       <Stack gap={0}>
         <div ref={ref} />
 
         <Flex justify="center">
-          <Group w={mapWidth}>
+          <Group w="100%">
             <Text flex={1} size="md" inline lineClamp={2} fw={600}>
-              {habit.name}
+              {name}
             </Text>
             <ProgressButton
-              color={habit.color}
+              color={color}
               progress={progress}
-              updateProgress={updateProgress}
+              updateProgress={() => updateLog(habit, date)}
+              label={progress === 100 ? <IconCheck size={35} /> : null}
             />
           </Group>
         </Flex>
@@ -77,9 +86,9 @@ export const Habit = ({ habit, habitStyle }: HabitTypes) => {
 
         {habitStyle === "streak" && (
           <Flex>
-            <StreakItem number={habit.currentStreak} icon="current" />
+            <StreakItem number={currentStreak} icon="current" />
             <Divider mx="xs" orientation="vertical" color={borderColor} />
-            <StreakItem number={habit.bestStreak} icon="best" />
+            <StreakItem number={bestStreak} icon="best" />
             <Divider mx="xs" orientation="vertical" color={borderColor} />
             <StreakItem number={completedCheks.length} icon="count" />
           </Flex>
@@ -89,7 +98,7 @@ export const Habit = ({ habit, habitStyle }: HabitTypes) => {
           <Flex justify="center">
             <Heatmap
               w={mapWidth}
-              colors={[habit.color]}
+              colors={[color]}
               domain={[0, 1]}
               data={heatmapData}
               rectRadius={10}

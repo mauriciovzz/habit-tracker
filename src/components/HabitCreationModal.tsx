@@ -11,10 +11,10 @@ import {
   ActionIcon,
   Flex,
 } from "@mantine/core";
+import { useHabits } from "../contexts/HabitsContext";
 import { useForm } from "@mantine/form";
+import type { HabitCreation } from "../types";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
-import type { HabitCreationData } from "../types";
-import { useHabits } from "../hooks/useHabits";
 
 interface HabitCreationModalTypes {
   opened: boolean;
@@ -49,7 +49,7 @@ export const HabitCreationModal = ({ opened, onClose }: HabitCreationModalTypes)
     });
   };
 
-  const handleAddHabit = async ({ name, color, reps }: HabitCreationData) => {
+  const handleAddHabit = async ({ name, color, reps }: HabitCreation) => {
     await addHabit({ name, color, reps });
     resetFormValues();
   };

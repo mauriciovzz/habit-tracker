@@ -1,16 +1,18 @@
 import { RingProgress, UnstyledButton } from "@mantine/core";
-import { IconCheck } from "@tabler/icons-react";
+import { type ReactNode } from "@tabler/icons-react";
 
 interface ProgressButtonTypes {
   progress: number;
   color: string;
   updateProgress: () => Promise<void>;
+  label: string | null | ReactNode;
 }
 
-export const ProgressButton = ({ progress, color, updateProgress }: ProgressButtonTypes) => {
+export const ProgressButton = ({ progress, color, updateProgress, label }: ProgressButtonTypes) => {
   return (
     <UnstyledButton
-      onClick={() => {
+      onClick={(e) => {
+        e.stopPropagation();
         void updateProgress();
       }}
     >
@@ -19,7 +21,7 @@ export const ProgressButton = ({ progress, color, updateProgress }: ProgressButt
         thickness={2}
         sections={[{ value: progress, color }]}
         transitionDuration={250}
-        label={progress === 100 ? <IconCheck size={35} /> : null}
+        label={label}
       />
     </UnstyledButton>
   );

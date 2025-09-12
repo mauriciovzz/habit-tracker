@@ -1,4 +1,4 @@
-export interface HabitInfo {
+export interface Habit {
   id: number;
   name: string;
   color: string;
@@ -6,14 +6,20 @@ export interface HabitInfo {
   position: number;
   currentStreak: number;
   bestStreak: number;
+  logs: LogData[];
 }
 
-export type HabitCreationData = Omit<HabitInfo, "id" | "position" | "currentStreak" | "bestStreak">;
+export type HabitCreation = Omit<
+  Habit,
+  "id" | "position" | "currentStreak" | "bestStreak" | "logs"
+>;
 
-export interface HabitCheck {
+export interface Log {
   habitId: number;
   date: string;
   count: number;
 }
+
+export type LogData = Omit<Log, "habitId">;
 
 export type HabitStyle = "simple" | "streak" | "heatmap";
