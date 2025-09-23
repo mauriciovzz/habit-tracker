@@ -13,7 +13,7 @@ import {
 } from "@mantine/core";
 import { useHabits } from "../contexts/HabitsContext";
 import { useForm } from "@mantine/form";
-import type { HabitCreation } from "../types";
+import type { HabitCretionProps } from "../types";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 
 interface HabitCreationModalTypes {
@@ -49,7 +49,7 @@ export const HabitCreationModal = ({ opened, onClose }: HabitCreationModalTypes)
     });
   };
 
-  const handleAddHabit = async ({ name, color, reps }: HabitCreation) => {
+  const handleAddHabit = async ({ name, color, reps }: HabitCretionProps) => {
     await addHabit({ name, color, reps });
     resetFormValues();
   };

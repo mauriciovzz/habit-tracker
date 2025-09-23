@@ -1,5 +1,4 @@
-import { ActionIcon } from "@mantine/core";
-import { IconCircleCheck, IconFlame, IconGridDots } from "@tabler/icons-react";
+import { Button, Text } from "@mantine/core";
 import type { HabitStyle } from "../types";
 
 interface HeaderTypes {
@@ -7,18 +6,12 @@ interface HeaderTypes {
   toggleHabitStyle: () => void;
 }
 
-const iconMap = {
-  simple: IconFlame,
-  streak: IconGridDots,
-  heatmap: IconCircleCheck,
-};
-
 export const HabitStyleButton = ({ habitStyle, toggleHabitStyle }: HeaderTypes) => {
-  const HabitStyleIcon = iconMap[habitStyle];
-
   return (
-    <ActionIcon variant="default" aria-label="ChangeHabitStyle" onClick={toggleHabitStyle}>
-      <HabitStyleIcon style={{ width: "70%", height: "70%" }} stroke={1.5} />
-    </ActionIcon>
+    <Button w="65" h={28} p={5} variant="default" onClick={toggleHabitStyle}>
+      <Text w="100%" ta="center" size="sm" fw={500}>
+        {habitStyle}
+      </Text>
+    </Button>
   );
 };

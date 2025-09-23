@@ -1,28 +1,31 @@
 import dayjs from "dayjs";
 import { useState } from "react";
 import { useDisclosure, useToggle } from "@mantine/hooks";
-import { useColorSchema } from "./hooks/useColorScheme";
+import { useColorScheme } from "./hooks/useColorScheme";
 import { useHabits } from "./contexts/HabitsContext";
 import type { HabitStyle } from "./types";
-import { IconPlus, IconSettings } from "@tabler/icons-react";
-import { AppShell, Drawer, Group, Stack, Text } from "@mantine/core";
-import { ColorSchemeButton } from "./components/ColorSchemeButton";
-import { HabitStyleButton } from "./components/HabitStyleButton";
+import { IconPlus, IconSettings, IconSun, IconMoon } from "@tabler/icons-react";
+import { AppShell, Button, em, Grid, Group, Text } from "@mantine/core";
 import { ActionButton } from "./components/ActionButton";
-import { HabitCreationModal } from "./components//HabitCreationModal";
+// import { HabitCreationModal } from "./components//HabitCreationModal";
 import { HabitDrawer } from "./components/HabitDrawer";
 import { HabitItem } from "./components/HabitItem";
+import { HabitFormDrawer } from "./components/HabitFormDrawer";
+import { SettingsDrawer } from "./components/SettingsDrawer";
+import { useMediaQuery } from "@mantine/hooks";
 
 const currentDate = dayjs().format("YYYY-MM-DD");
 
 export const App = () => {
+  const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
+
   const { habits } = useHabits();
 
-  const [selectedHabit, setSelectedHabit] = useState<number | null>(null);
+  const [selectedHabitId, setSelectedHabitId] = useState<number | null>(null);
 
   const [addHabitOpened, { open: openAddHabit, close: closeAddHabit }] = useDisclosure(false);
-  const [habitStyle, toggleHabitStyle] = useToggle<HabitStyle>(["simple", "streak", "heatmap"]);
-  const { colorScheme, toggleColorScheme } = useColorSchema();
+  const [habitStyle, toggleHabitStyle] = useToggle<HabitStyle>(["simple", "streaks", "chart"]);
+  const { colorScheme, themeTextColor, themeBorderColor, toggleColorScheme } = useColorScheme();
   const [settingsOpened, { open: openSettings, close: closeSettings }] = useDisclosure(false);
   const [habitOpened, { open: openHabit, close: closeHabit }] = useDisclosure(false);
 
@@ -30,13 +33,13 @@ export const App = () => {
     const foundHabit = habits.find((h) => h.id === habitId);
 
     if (foundHabit) {
-      setSelectedHabit(foundHabit.id);
+      setSelectedHabitId(foundHabit.id);
       openHabit();
     }
   };
 
   const closeHabitDrawer = () => {
-    setSelectedHabit(null);
+    setSelectedHabitId(null);
     closeHabit();
   };
 
@@ -48,10 +51,26 @@ export const App = () => {
             <Text size="lg" fw={700}>
               Habits
             </Text>
-            <Group ml="xl" gap={10}>
+
+            <Group gap={10}>
               <ActionButton toggle={openAddHabit} icon={IconPlus} />
-              <HabitStyleButton habitStyle={habitStyle} toggleHabitStyle={toggleHabitStyle} />
-              <ColorSchemeButton colorScheme={colorScheme} toggleColorScheme={toggleColorScheme} />
+              <Button
+                w="65"
+                h={28}
+                p={5}
+                variant="default"
+                onClick={() => {
+                  toggleHabitStyle();
+                }}
+              >
+                <Text w="100%" ta="center" size="sm" fw={500}>
+                  {habitStyle}
+                </Text>
+              </Button>
+              <ActionButton
+                toggle={toggleColorScheme}
+                icon={colorScheme === "dark" ? IconSun : IconMoon}
+              />
               <ActionButton toggle={openSettings} icon={IconSettings} />
             </Group>
           </Group>
@@ -59,40 +78,40 @@ export const App = () => {
       </AppShell.Header>
 
       <AppShell.Main>
-        <Stack gap="md">
+        <Grid gutter="md" columns={isMobile ? 1 : 3}>
           {habits.map((h) => (
-            <HabitItem
-              key={h.id}
-              habit={h}
-              habitStyle={habitStyle}
-              date={currentDate}
-              openHabit={() => {
-                openHabitDrawer(h.id);
-              }}
-            />
+            <Grid.Col span={1}>
+              <HabitItem
+                key={h.id}
+                habit={h}
+                habitStyle={habitStyle}
+                themeBorderColor={themeBorderColor}
+                date={currentDate}
+                openHabit={() => {
+                  openHabitDrawer(h.id);
+                }}
+              />
+            </Grid.Col>
           ))}
-        </Stack>
+        </Grid>
       </AppShell.Main>
 
-      <Drawer
+      <HabitFormDrawer opened={addHabitOpened} onClose={closeAddHabit} />
+
+      <SettingsDrawer
+        habits={habits}
         opened={settingsOpened}
+        themeTextColor={themeTextColor}
+        themeBorderColor={themeBorderColor}
         onClose={closeSettings}
-        title="Settings"
-        position="bottom"
-        size="98%"
-      >
-        Reorder habits Manage data
-      </Drawer>
+      />
 
-      {selectedHabit && (
-        <HabitDrawer
-          habitOpened={habitOpened}
-          closeHabit={closeHabitDrawer}
-          habit={habits.find((h) => h.id === selectedHabit)}
-        />
-      )}
-
-      <HabitCreationModal opened={addHabitOpened} onClose={closeAddHabit} />
+      <HabitDrawer
+        habit={habits.find((h) => h.id === selectedHabitId)}
+        borderTheme={themeBorderColor}
+        habitOpened={habitOpened}
+        closeHabit={closeHabitDrawer}
+      />
     </AppShell>
   );
 };

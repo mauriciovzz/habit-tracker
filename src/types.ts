@@ -9,10 +9,12 @@ export interface Habit {
   logs: LogData[];
 }
 
-export type HabitCreation = Omit<
+export type HabitCretionProps = Omit<
   Habit,
   "id" | "position" | "currentStreak" | "bestStreak" | "logs"
 >;
+
+export type HabitUpdateProps = Omit<Habit, "position" | "currentStreak" | "bestStreak" | "logs">;
 
 export interface Log {
   habitId: number;
@@ -22,4 +24,4 @@ export interface Log {
 
 export type LogData = Omit<Log, "habitId">;
 
-export type HabitStyle = "simple" | "streak" | "heatmap";
+export type HabitStyle = "simple" | "streaks" | "chart";

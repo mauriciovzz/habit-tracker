@@ -4,7 +4,7 @@ import isYesterday from "dayjs/plugin/isYesterday";
 dayjs.extend(isToday);
 dayjs.extend(isYesterday);
 import { db } from "../db";
-import type { Habit, HabitCreation, Log, LogData } from "../types";
+import type { Habit, HabitCretionProps, HabitUpdateProps, Log, LogData } from "../types";
 import Dexie from "dexie";
 
 interface Streaks {
@@ -31,11 +31,11 @@ const updateLogCount = async ({ habitId, date, count }: Log): Promise<LogData[]>
   return getLogsForHabit(habitId);
 };
 
-const updateStreaks = async (habit: Habit, logs: LogData[]): Promise<Streaks> => {
-  const completedLogs = logs.filter((l) => l.count === habit.reps);
+const updateStreaks = async (id: number, reps: number, logs: LogData[]): Promise<Streaks> => {
+  const completedLogs = logs.filter((l) => l.count === reps);
 
   if (completedLogs.length === 0) {
-    await db.habits.update(habit.id, { currentStreak: 0, bestStreak: 0 });
+    await db.habits.update(id, { currentStreak: 0, bestStreak: 0 });
     return { currentStreak: 0, bestStreak: 0 };
   }
 
@@ -43,7 +43,7 @@ const updateStreaks = async (habit: Habit, logs: LogData[]): Promise<Streaks> =>
   let bestStreak = 1;
 
   if (completedLogs.length === 1) {
-    await db.habits.update(habit.id, { currentStreak: 1, bestStreak: 1 });
+    await db.habits.update(id, { currentStreak: 1, bestStreak: 1 });
     return { currentStreak: 1, bestStreak: 1 };
   }
 
@@ -64,7 +64,7 @@ const updateStreaks = async (habit: Habit, logs: LogData[]): Promise<Streaks> =>
     bestStreak,
   };
 
-  await db.habits.update(habit.id, newStreaks);
+  await db.habits.update(id, newStreaks);
 
   return newStreaks;
 };
@@ -81,7 +81,7 @@ const getAll = async (): Promise<Habit[]> => {
   return habits;
 };
 
-const add = async ({ name, color, reps }: HabitCreation): Promise<Habit> => {
+const add = async ({ name, color, reps }: HabitCretionProps): Promise<Habit> => {
   const position = await db.habits.count();
 
   const newHabit = {
@@ -97,11 +97,76 @@ const add = async ({ name, color, reps }: HabitCreation): Promise<Habit> => {
   return { id, ...newHabit, logs: [] };
 };
 
+const reset = async (habitId: number): Promise<void> => {
+  await db.logs.where("habitId").equals(habitId).delete();
+  await db.habits.update(habitId, { currentStreak: 0, bestStreak: 0 });
+};
+
+const update = async ({ id, name, color, reps }: HabitUpdateProps): Promise<Habit | undefined> => {
+  const originalHabit = await db.habits.get(id);
+  if (!originalHabit) return undefined;
+
+  const logs = await db.logs.where("habitId").equals(id).toArray();
+
+  await db.habits.update(id, { name, color, reps });
+  const streaks = await updateStreaks(id, reps, logs);
+
+  const updatedHabit: Habit = {
+    ...originalHabit,
+    name,
+    color,
+    reps,
+    ...streaks,
+    logs,
+  };
+
+  return updatedHabit;
+};
+
+const updatePosition = async (habitId: number, fromPosition: number, toPosition: number) => {
+  if (fromPosition === toPosition) return;
+
+  await db.transaction("rw", db.habits, async () => {
+    if (fromPosition < toPosition) {
+      await db.habits
+        .where("position")
+        .between(fromPosition + 1, toPosition, true, true)
+        .modify((h) => {
+          h.position -= 1;
+        });
+    } else {
+      await db.habits
+        .where("position")
+        .between(toPosition, fromPosition - 1, true, true)
+        .modify((h) => {
+          h.position += 1;
+        });
+    }
+
+    await db.habits.update(habitId, { position: toPosition });
+  });
+};
+
+const remove = async (habitId: number): Promise<Habit[]> => {
+  await reset(habitId);
+
+  await db.transaction("rw", db.habits, async () => {
+    await db.habits.delete(habitId);
+
+    const habits = await db.habits.orderBy("position").toArray();
+    const updatedHabits = habits.map((h, i) => ({ ...h, position: i }));
+
+    await db.habits.bulkPut(updatedHabits);
+  });
+
+  return getAll();
+};
+
 const updateAllStreaks = async (): Promise<void> => {
   const habits = await getAll();
 
   for (const habit of habits) {
-    await updateStreaks(habit, habit.logs);
+    await updateStreaks(habit.id, habit.reps, habit.logs);
   }
 };
 
@@ -112,7 +177,7 @@ const updateHabitLog = async (habit: Habit, date: string) => {
   // reset count + update streaks
   if (log && log.count >= reps) {
     const updatedLogs = await updateLogCount({ habitId: id, date, count: 0 });
-    const streaks = await updateStreaks(habit, updatedLogs);
+    const streaks = await updateStreaks(habit.id, habit.reps, updatedLogs);
 
     return { ...streaks, log: { date, count: 0 } };
   }
@@ -125,7 +190,7 @@ const updateHabitLog = async (habit: Habit, date: string) => {
     let streaks = { currentStreak: habit.currentStreak, bestStreak: habit.bestStreak };
 
     if (newCount === reps) {
-      streaks = await updateStreaks(habit, updatedLogs);
+      streaks = await updateStreaks(habit.id, habit.reps, updatedLogs);
     }
 
     return { ...streaks, log: { date, count: newCount } };
@@ -136,10 +201,52 @@ const updateHabitLog = async (habit: Habit, date: string) => {
   let streaks = { currentStreak: habit.currentStreak, bestStreak: habit.bestStreak };
 
   if (reps === 1) {
-    streaks = await updateStreaks(habit, updatedLogs);
+    streaks = await updateStreaks(habit.id, habit.reps, updatedLogs);
   }
 
   return { ...streaks, log: { date, count: 1 } };
 };
 
-export default { getAll, add, updateAllStreaks, updateHabitLog };
+const downloadData = async () => {
+  const habits = await db.habits.toArray();
+  const logs = await db.logs.toArray();
+
+  return { habits, logs };
+};
+
+const uploadData = async (data: { habits: Habit[]; logs: Log[] }) => {
+  const { habits, logs } = data;
+
+  await db.transaction("rw", db.habits, db.logs, async () => {
+    await db.habits.clear();
+    await db.logs.clear();
+
+    if (habits.length) {
+      await db.habits.bulkAdd(habits);
+    }
+    if (logs.length) {
+      await db.logs.bulkAdd(logs);
+    }
+  });
+};
+
+const deleteData = async () => {
+  await db.transaction("rw", db.habits, db.logs, async () => {
+    await db.habits.clear();
+    await db.logs.clear();
+  });
+};
+
+export default {
+  getAll,
+  add,
+  update,
+  updatePosition,
+  reset,
+  remove,
+  updateAllStreaks,
+  updateHabitLog,
+  downloadData,
+  uploadData,
+  deleteData,
+};

@@ -124,8 +124,8 @@ export const HabitDrawer = ({ habit, habitOpened, borderTheme, closeHabit }: Hab
       <Drawer.Overlay />
 
       <Drawer.Content>
-        <Drawer.Header bg={color} c="white" p="md">
-          <Group w="100%" gap="xs">
+        <Drawer.Header>
+          <Group bg={color} c="white" p="md" w="100%" gap="xs">
             <TextButton text="Edit" width={buttonsWidth} onClick={openEdit} />
             <Text flex={1} size="xl" lineClamp={2} fw={500} ta="center" style={{ lineHeight: 1.2 }}>
               {name}

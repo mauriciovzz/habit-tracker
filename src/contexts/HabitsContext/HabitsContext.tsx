@@ -1,10 +1,17 @@
 import { createContext, useContext } from "react";
-import type { Habit, HabitCreation } from "../../types";
+import type { Habit, HabitCretionProps, HabitUpdateProps } from "../../types";
 
 interface HabitsContextType {
   habits: Habit[];
-  addHabit: (data: HabitCreation) => Promise<void>;
+  addHabit: (data: HabitCretionProps) => Promise<void>;
+  updateHabit: (data: HabitUpdateProps) => Promise<void>;
+  updateHabitPosition: (habitId: number, fromPosition: number, toPosition: number) => Promise<void>;
+  resetHabit: (habitId: number) => Promise<void>;
+  deleteHabit: (habitId: number) => Promise<void>;
   updateLog: (habit: Habit, date: string) => Promise<void>;
+  downloadData: () => Promise<void>;
+  uploadData: (file: File) => Promise<void>;
+  deleteData: () => Promise<void>;
 }
 
 export const HabitsContext = createContext<HabitsContextType | undefined>(undefined);
