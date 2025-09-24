@@ -57,7 +57,7 @@ export const HabitHeatmap = ({ habit, showFullYear }: HabitItemProps) => {
       data={heatmapData}
       rectRadius={10}
       rectSize={rectSize}
-      firstDayOfWeek={1}
+      firstDayOfWeek={0}
       startDate={startDate}
       endDate={endDate}
       withMonthLabels={showFullYear}

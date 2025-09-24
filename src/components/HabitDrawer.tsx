@@ -45,9 +45,16 @@ interface HabitDrawerProps {
   habitOpened: boolean;
   borderTheme: string;
   closeHabit: () => void;
+  isMobile: boolean;
 }
 
-export const HabitDrawer = ({ habit, habitOpened, borderTheme, closeHabit }: HabitDrawerProps) => {
+export const HabitDrawer = ({
+  habit,
+  habitOpened,
+  borderTheme,
+  closeHabit,
+  isMobile,
+}: HabitDrawerProps) => {
   const { updateLog, resetHabit, deleteHabit } = useHabits();
   const { width } = useViewportSize();
   const buttonsWidth = (width - 32) / 7;
@@ -112,11 +119,11 @@ export const HabitDrawer = ({ habit, habitOpened, borderTheme, closeHabit }: Hab
     <Drawer.Root
       opened={habitOpened}
       onClose={closeHabit}
-      position="bottom"
-      size="96%"
-      radius="16px 16px 0 0"
+      position={isMobile ? "bottom" : "right"}
+      size={isMobile ? "96%" : "40%"}
+      radius={isMobile ? "16px 16px 0 0" : "16px 0 0 16px"}
       transitionProps={{
-        transition: "slide-up",
+        transition: isMobile ? "slide-up" : "slide-left",
         duration: 250,
         timingFunction: "linear",
       }}

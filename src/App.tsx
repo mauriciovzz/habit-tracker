@@ -111,6 +111,7 @@ export const App = () => {
         borderTheme={themeBorderColor}
         habitOpened={habitOpened}
         closeHabit={closeHabitDrawer}
+        isMobile={isMobile}
       />
     </AppShell>
   );
