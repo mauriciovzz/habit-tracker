@@ -14,7 +14,7 @@ import { Calendar, DatesProvider, type DatePickerProps } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import type { Habit } from "../../types";
 import { useHabits } from "../../contexts/HabitsContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { ConfirmationModal } from "../ConfirmationModal";
 import { CustomDrawer } from "./CustomDrawer";
@@ -57,6 +57,10 @@ export const SelectedHabit = ({
   const bodyHeight = drawerBodyHeight ?? 0;
 
   const [date, setDate] = useState(new Date());
+
+  useEffect(() => {
+    setDate(new Date());
+  }, [habit]);
 
   const showPreviousMonth = () => {
     setDate((prev) => {

@@ -14,13 +14,13 @@ import { Settings } from "./components/Drawers/Settings";
 import { useMediaQuery } from "@mantine/hooks";
 import { CustomDrawer } from "./components/Drawers/CustomDrawer";
 
-const currentDate = dayjs().format("YYYY-MM-DD");
-
 export const App = () => {
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
+
   const { habits } = useHabits();
   const { height } = useViewportSize();
 
+  const [currentDate, setCurrentDate] = useState(dayjs().format("YYYY-MM-DD"));
   const [selectedHabitId, setSelectedHabitId] = useState<number | null>(null);
 
   const [addHabitOpened, { open: openAddHabit, close: closeAddHabit }] = useDisclosure(false);
@@ -87,13 +87,13 @@ export const App = () => {
         ) : (
           <Grid gutter="md" columns={isMobile ? 1 : 3}>
             {habits.map((h) => (
-              <Grid.Col span={1}>
+              <Grid.Col key={h.id} span={1}>
                 <HabitItem
-                  key={h.id}
                   habit={h}
                   habitStyle={habitStyle}
                   themeBorderColor={themeBorderColor}
-                  date={currentDate}
+                  currentDate={currentDate}
+                  setCurrentDate={setCurrentDate}
                   openHabit={() => {
                     openHabitDrawer(h.id);
                   }}

@@ -13,12 +13,14 @@ import { HabitStreaks } from "./HabitStreaks";
 import { IconCheck } from "@tabler/icons-react";
 import { useHabits } from "../contexts/HabitsContext";
 import { HabitHeatmap } from "./HabitHeatmap";
+import dayjs from "dayjs";
 
 interface HabitItemProps {
   habit: Habit;
   habitStyle: HabitStyle;
   themeBorderColor: string;
-  date: string;
+  currentDate: string;
+  setCurrentDate: React.Dispatch<React.SetStateAction<string>>;
   openHabit: () => void;
 }
 
@@ -26,13 +28,14 @@ export const HabitItem = ({
   habit,
   habitStyle,
   themeBorderColor,
-  date,
+  currentDate,
+  setCurrentDate,
   openHabit,
 }: HabitItemProps) => {
   const { updateLog } = useHabits();
   const { name, color, reps, logs } = habit;
 
-  const currentLog = logs.find((l) => l.date === date);
+  const currentLog = logs.find((l) => l.date === currentDate);
   const count = currentLog?.count ?? 0;
   const progress = (count / reps) * 100;
   const isTodayComplete = progress >= 100;
@@ -52,7 +55,11 @@ export const HabitItem = ({
             <UnstyledButton
               onClick={(e) => {
                 e.stopPropagation();
-                void updateLog(habit, date);
+                const newDate = dayjs().format("YYYY-MM-DD");
+
+                if (currentDate !== newDate) setCurrentDate(newDate);
+
+                void updateLog(habit, newDate);
               }}
             >
               <RingProgress
