@@ -23,6 +23,7 @@ export function CustomDrawer<P>({
 
   const finalWidth = isMobile ? vpWidth : vpWidth * 0.4;
   const drawerButtonWidth = (finalWidth - 32) / 7;
+
   const drawerBodyHeight = isMobile ? vpHeight * 0.96 : vpHeight;
 
   return (

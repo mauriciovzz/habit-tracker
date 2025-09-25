@@ -12,6 +12,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { IconGripHorizontal } from "@tabler/icons-react";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { useHabits } from "../../../contexts/HabitsContext";
+import { useViewportSize } from "@mantine/hooks";
 
 const SortableHabit = ({ habit }: { habit: Habit }) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
@@ -27,7 +28,7 @@ const SortableHabit = ({ habit }: { habit: Habit }) => {
     <Paper p="xs" withBorder bdrs="lg" ref={setNodeRef} style={style} {...attributes}>
       <Flex justify="center">
         <Group w="100%">
-          <Text flex={1} size="md" inline lineClamp={2} fw={500}>
+          <Text flex={1} size="md" lineClamp={2} fw={500} style={{ lineHeight: 1.2 }}>
             {habit.name}
           </Text>
           <span
@@ -48,11 +49,14 @@ const SortableHabit = ({ habit }: { habit: Habit }) => {
 
 interface HabitReorderWindowProps {
   originalHabits: Habit[];
+  isMobile: boolean;
 }
 
-export const HabitReorderWindow = ({ originalHabits }: HabitReorderWindowProps) => {
+export const HabitReorderWindow = ({ originalHabits, isMobile }: HabitReorderWindowProps) => {
   const { updateHabitPosition } = useHabits();
   const [habits, setHabits] = useState(originalHabits);
+  const { height } = useViewportSize();
+  const finalHeight = isMobile ? height * 0.96 : height;
 
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
@@ -72,22 +76,30 @@ export const HabitReorderWindow = ({ originalHabits }: HabitReorderWindowProps) 
 
   return (
     <Stack p="md">
-      <Text size="md" ta="center" c="dimmed">
+      <Text size="md" ta="center" c="dimmed" h={25}>
         Drag the habits from the handle to reorden them
       </Text>
-      <DndContext
-        collisionDetection={closestCenter}
-        onDragEnd={(event) => {
-          void handleDragEnd(event);
-        }}
-        modifiers={[restrictToVerticalAxis]}
-      >
-        <SortableContext items={habits.map((h) => h.id)} strategy={verticalListSortingStrategy}>
-          {habits.map((habit) => (
-            <SortableHabit key={habit.id} habit={habit} />
-          ))}
-        </SortableContext>
-      </DndContext>
+      {habits.length === 0 ? (
+        <Flex align="center" justify="center" h={finalHeight - 80 - 32 - 25 - 16}>
+          <Text size="md" fw={600}>
+            No habits to reorder
+          </Text>
+        </Flex>
+      ) : (
+        <DndContext
+          collisionDetection={closestCenter}
+          onDragEnd={(event) => {
+            void handleDragEnd(event);
+          }}
+          modifiers={[restrictToVerticalAxis]}
+        >
+          <SortableContext items={habits.map((h) => h.id)} strategy={verticalListSortingStrategy}>
+            {habits.map((habit) => (
+              <SortableHabit key={habit.id} habit={habit} />
+            ))}
+          </SortableContext>
+        </DndContext>
+      )}
     </Stack>
   );
 };

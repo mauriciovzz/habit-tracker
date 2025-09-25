@@ -1,19 +1,78 @@
-import { useState } from "react";
-import { Box, Stack, Text, Flex } from "@mantine/core";
+import { useState, type ReactNode } from "react";
+import {
+  Box,
+  Text,
+  Flex,
+  Transition,
+  type MantineTransition,
+  Modal,
+  Divider,
+  FileInput,
+} from "@mantine/core";
 import { TextButton } from "../../Buttons/TextButton";
-import { HabitReorderWindow } from "./HabitReorderWindow";
-import type { Habit } from "../../../types";
+import type { Habit, SettingsView } from "../../../types";
+import { MainWindow } from "./MainWindow";
 import { DataManagementWindow } from "./DataManagementWindow";
-import { IconArrowsShuffle, IconFolderDown } from "@tabler/icons-react";
-import { SettingsButton } from "./SettingsButton";
+import { HabitReorderWindow } from "./HabitReorderWindow";
+import { ConfirmationModal } from "../../ConfirmationModal";
+import { useDisclosure } from "@mantine/hooks";
+import { useHabits } from "../../../contexts/HabitsContext";
+import { ButtonGroup } from "../../Buttons/ButtonGroup";
 
-type DrawerView = "menu" | "reorder" | "data";
+const HeaderTransition = ({
+  mounted,
+  trans,
+  text,
+}: {
+  mounted: boolean;
+  trans: MantineTransition;
+  text: string;
+}) => (
+  <Transition mounted={mounted} transition={trans} duration={200} timingFunction="ease">
+    {(styles) => (
+      <Text size="xl" fw={500} ta="left" style={{ ...styles, position: "absolute", width: "100%" }}>
+        {text}
+      </Text>
+    )}
+  </Transition>
+);
+
+const BodyTransition = ({
+  mounted,
+  trans,
+  body,
+}: {
+  mounted: boolean;
+  trans: MantineTransition;
+  body: ReactNode;
+}) => (
+  <Transition mounted={mounted} transition={trans} duration={200} timingFunction="ease">
+    {(styles) => (
+      <Box
+        style={{
+          ...styles,
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        {body}
+      </Box>
+    )}
+  </Transition>
+);
 
 interface SettingsProps {
   habits: Habit[];
   onClose: () => void;
   themeTextColor: string;
   themeBorderColor: string;
+  isMobile?: boolean;
+  drawerBodyHeight?: number;
   drawerButtonWidth?: number;
 }
 
@@ -22,64 +81,27 @@ export const Settings = ({
   onClose,
   themeTextColor,
   themeBorderColor,
+  isMobile,
+  drawerBodyHeight,
   drawerButtonWidth,
 }: SettingsProps) => {
-  const [view, setView] = useState<DrawerView | null>(null);
+  const [view, setView] = useState<SettingsView>("menu");
 
   const buttonsWidth = drawerButtonWidth ?? 0;
+  const bodyHeight = drawerBodyHeight ?? 0;
 
-  const closeDrawer = () => {
+  const { downloadData, uploadData, deleteData } = useHabits();
+  const [deleteOpened, { open: openDelete, close: closeDelete }] = useDisclosure(false);
+  const [uploadOpened, { open: openUpload, close: closeUpload }] = useDisclosure(false);
+
+  const [file, setFile] = useState<File | null>(null);
+
+  const closeSettings = () => {
     onClose();
 
     setTimeout(() => {
       setView("menu");
     }, 200);
-  };
-
-  const closeSettings = () => {
-    onClose();
-    setView(null);
-  };
-
-  const renderTitle = () => {
-    switch (view) {
-      case "reorder":
-        return "Reorder Habis";
-      case "data":
-        return "Manage Data";
-      default:
-        return "Settings";
-    }
-  };
-
-  const renderBody = () => {
-    switch (view) {
-      case "reorder":
-        return <HabitReorderWindow originalHabits={habits} />;
-      case "data":
-        return <DataManagementWindow closeSettings={closeSettings} />;
-      default:
-        return (
-          <Stack w="100%" h="100%" p="md" gap="md">
-            <SettingsButton
-              icon={IconArrowsShuffle}
-              header="Reorder Habits"
-              description="change the order of  your habits"
-              onClick={() => {
-                setView("reorder");
-              }}
-            />
-            <SettingsButton
-              icon={IconFolderDown}
-              header="Manage Data"
-              description="Download, upload or delete app data"
-              onClick={() => {
-                setView("data");
-              }}
-            />
-          </Stack>
-        );
-    }
   };
 
   return (
@@ -88,26 +110,112 @@ export const Settings = ({
         p="md"
         h="80px"
         align="center"
-        style={{ borderBottom: `1px solid ${themeBorderColor}` }}
+        style={{ borderBottom: `1px solid ${themeBorderColor}`, position: "relative" }}
       >
-        <Text flex={1} size="xl" inline lineClamp={2} fw={500} ta="left">
-          {renderTitle()}
-        </Text>
+        <Flex
+          align="center"
+          style={{ flex: 1, position: "relative", overflow: "hidden", height: "100%" }}
+        >
+          <HeaderTransition mounted={view === "menu"} trans="slide-right" text="Settings" />
+          <HeaderTransition mounted={view === "reorder"} trans="slide-left" text="Reorder Habits" />
+          <HeaderTransition mounted={view === "data"} trans="slide-left" text="Manage Data" />
+        </Flex>
+
         <TextButton
           text="Back"
           width={buttonsWidth}
           onClick={
-            view === null
-              ? closeDrawer
+            view === "menu"
+              ? closeSettings
               : () => {
-                  setView(null);
+                  setView("menu");
                 }
           }
           customColor={themeTextColor}
         />
       </Flex>
 
-      <Box p={0}>{renderBody()}</Box>
+      <Box p={0} pos="relative" h={bodyHeight - 80} w="100%" style={{ overflow: "hidden" }}>
+        <BodyTransition
+          mounted={view === "menu"}
+          trans="slide-right"
+          body={<MainWindow setView={setView} />}
+        />
+        <BodyTransition
+          mounted={view === "reorder"}
+          trans="slide-left"
+          body={<HabitReorderWindow originalHabits={habits} isMobile={isMobile ?? false} />}
+        />
+        <BodyTransition
+          mounted={view === "data"}
+          trans="slide-left"
+          body={
+            <DataManagementWindow
+              downloadData={() => {
+                void downloadData();
+              }}
+              openDelete={openDelete}
+              openUpload={openUpload}
+            />
+          }
+        />
+      </Box>
+
+      <ConfirmationModal
+        opened={deleteOpened}
+        message={`Do you want to delete all data?`}
+        color="gray"
+        onConfirm={() => {
+          void deleteData();
+          closeDelete();
+          closeSettings();
+        }}
+        onCancel={closeDelete}
+      />
+
+      <Modal
+        opened={uploadOpened}
+        onClose={closeUpload}
+        radius="lg"
+        withCloseButton={false}
+        transitionProps={{
+          transition: "fade-up",
+          duration: 250,
+          timingFunction: "linear",
+        }}
+        withinPortal={false}
+        zIndex={2000}
+        styles={{ content: { alignSelf: "flex-end" } }}
+      >
+        <Divider
+          label="Select a JSON File"
+          labelPosition="center"
+          mb="7"
+          styles={{ label: { fontSize: 16 } }}
+        />
+
+        <FileInput value={file} onChange={setFile} accept="application/json" clearable />
+
+        <Divider my="md" />
+
+        <Text mb="xs" fw={600} ta="center">
+          Do you want to replace exising data?
+        </Text>
+        <ButtonGroup
+          first={{ text: "No", color: "gray", onClick: closeUpload }}
+          second={{
+            text: "Yes",
+            color: "red",
+            onClick: () => {
+              if (file) {
+                void uploadData(file);
+                closeSettings();
+              }
+              closeUpload();
+            },
+          }}
+        />
+      </Modal>
     </Box>
   );
 };

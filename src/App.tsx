@@ -1,11 +1,11 @@
 import dayjs from "dayjs";
 import { useState } from "react";
-import { useDisclosure, useToggle } from "@mantine/hooks";
+import { useDisclosure, useToggle, useViewportSize } from "@mantine/hooks";
 import { useColorScheme } from "./hooks/useColorScheme";
 import { useHabits } from "./contexts/HabitsContext";
 import type { HabitStyle } from "./types";
 import { IconPlus, IconSettings, IconSun, IconMoon } from "@tabler/icons-react";
-import { AppShell, Button, em, Grid, Group, Text } from "@mantine/core";
+import { AppShell, Button, em, Flex, Grid, Group, Text } from "@mantine/core";
 import { ActionButton } from "./components/Buttons/ActionButton";
 import { SelectedHabit } from "./components/Drawers/SelectedHabit";
 import { HabitItem } from "./components/HabitItem";
@@ -18,8 +18,8 @@ const currentDate = dayjs().format("YYYY-MM-DD");
 
 export const App = () => {
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
-
   const { habits } = useHabits();
+  const { height } = useViewportSize();
 
   const [selectedHabitId, setSelectedHabitId] = useState<number | null>(null);
 
@@ -78,22 +78,30 @@ export const App = () => {
       </AppShell.Header>
 
       <AppShell.Main>
-        <Grid gutter="md" columns={isMobile ? 1 : 3}>
-          {habits.map((h) => (
-            <Grid.Col span={1}>
-              <HabitItem
-                key={h.id}
-                habit={h}
-                habitStyle={habitStyle}
-                themeBorderColor={themeBorderColor}
-                date={currentDate}
-                openHabit={() => {
-                  openHabitDrawer(h.id);
-                }}
-              />
-            </Grid.Col>
-          ))}
-        </Grid>
+        {habits.length === 0 ? (
+          <Flex align="center" justify="center" h={height - 76 - 32}>
+            <Text size="md" fw={600}>
+              Add a new habit clicking on +
+            </Text>
+          </Flex>
+        ) : (
+          <Grid gutter="md" columns={isMobile ? 1 : 3}>
+            {habits.map((h) => (
+              <Grid.Col span={1}>
+                <HabitItem
+                  key={h.id}
+                  habit={h}
+                  habitStyle={habitStyle}
+                  themeBorderColor={themeBorderColor}
+                  date={currentDate}
+                  openHabit={() => {
+                    openHabitDrawer(h.id);
+                  }}
+                />
+              </Grid.Col>
+            ))}
+          </Grid>
+        )}
       </AppShell.Main>
 
       <CustomDrawer opened={addHabitOpened} isMobile={isMobile}>

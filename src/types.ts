@@ -25,3 +25,5 @@ export interface Log {
 export type LogData = Omit<Log, "habitId">;
 
 export type HabitStyle = "simple" | "streaks" | "chart";
+
+export type SettingsView = "menu" | "reorder" | "data";
