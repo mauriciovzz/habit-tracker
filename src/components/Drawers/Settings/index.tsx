@@ -1,33 +1,32 @@
 import { useState } from "react";
-import { Drawer, Stack, Text } from "@mantine/core";
-import { useViewportSize } from "@mantine/hooks";
-import { TextButton } from "../TextButton";
+import { Box, Stack, Text, Flex } from "@mantine/core";
+import { TextButton } from "../../Buttons/TextButton";
 import { HabitReorderWindow } from "./HabitReorderWindow";
-import type { Habit } from "../../types";
+import type { Habit } from "../../../types";
 import { DataManagementWindow } from "./DataManagementWindow";
 import { IconArrowsShuffle, IconFolderDown } from "@tabler/icons-react";
 import { SettingsButton } from "./SettingsButton";
 
-interface SettingsDrawerProps {
-  habits: Habit[];
-  opened: boolean;
-  themeTextColor: string;
-  themeBorderColor: string;
-  onClose: () => void;
-}
-
 type DrawerView = "menu" | "reorder" | "data";
 
-export const SettingsDrawer = ({
+interface SettingsProps {
+  habits: Habit[];
+  onClose: () => void;
+  themeTextColor: string;
+  themeBorderColor: string;
+  drawerButtonWidth?: number;
+}
+
+export const Settings = ({
   habits,
-  opened,
+  onClose,
   themeTextColor,
   themeBorderColor,
-  onClose,
-}: SettingsDrawerProps) => {
-  const { width } = useViewportSize();
-  const buttonsWidth = (width - 32) / 7;
+  drawerButtonWidth,
+}: SettingsProps) => {
   const [view, setView] = useState<DrawerView | null>(null);
+
+  const buttonsWidth = drawerButtonWidth ?? 0;
 
   const closeDrawer = () => {
     onClose();
@@ -84,41 +83,31 @@ export const SettingsDrawer = ({
   };
 
   return (
-    <Drawer.Root
-      opened={opened}
-      onClose={closeDrawer}
-      position="bottom"
-      size="96%"
-      radius="16px 16px 0 0"
-      transitionProps={{
-        transition: "slide-up",
-        duration: 250,
-        timingFunction: "linear",
-      }}
-    >
-      <Drawer.Overlay />
+    <Box>
+      <Flex
+        p="md"
+        h="80px"
+        align="center"
+        style={{ borderBottom: `1px solid ${themeBorderColor}` }}
+      >
+        <Text flex={1} size="xl" inline lineClamp={2} fw={500} ta="left">
+          {renderTitle()}
+        </Text>
+        <TextButton
+          text="Back"
+          width={buttonsWidth}
+          onClick={
+            view === null
+              ? closeDrawer
+              : () => {
+                  setView(null);
+                }
+          }
+          customColor={themeTextColor}
+        />
+      </Flex>
 
-      <Drawer.Content>
-        <Drawer.Header p="md" style={{ borderBottom: `1px solid ${themeBorderColor}` }}>
-          <Text flex={1} size="xl" inline lineClamp={2} fw={500} ta="left">
-            {renderTitle()}
-          </Text>
-          <TextButton
-            text="Back"
-            width={buttonsWidth}
-            onClick={
-              view === null
-                ? onClose
-                : () => {
-                    setView(null);
-                  }
-            }
-            customColor={themeTextColor}
-          />
-        </Drawer.Header>
-
-        <Drawer.Body p={0}>{renderBody()}</Drawer.Body>
-      </Drawer.Content>
-    </Drawer.Root>
+      <Box p={0}>{renderBody()}</Box>
+    </Box>
   );
 };

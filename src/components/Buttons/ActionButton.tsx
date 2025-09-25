@@ -1,6 +1,6 @@
 import { ActionIcon } from "@mantine/core";
 import type { Icon, IconProps } from "@tabler/icons-react";
-import { useColorScheme } from "../hooks/useColorScheme";
+import { useColorScheme } from "../../hooks/useColorScheme";
 
 interface HeaderTypes {
   toggle: () => void;

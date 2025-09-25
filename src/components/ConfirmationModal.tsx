@@ -1,5 +1,5 @@
 import { Modal, Text } from "@mantine/core";
-import { ButtonGroup } from "./ButtonGroup";
+import { ButtonGroup } from "./Buttons/ButtonGroup";
 
 interface ConfrimationModalProps {
   opened: boolean;
@@ -20,16 +20,18 @@ export const ConfirmationModal = ({
     <Modal
       opened={opened}
       onClose={onCancel}
-      styles={{ content: { alignSelf: "flex-end" } }}
       radius="lg"
       withCloseButton={false}
       transitionProps={{
-        transition: "slide-up",
+        transition: "fade-up",
         duration: 250,
         timingFunction: "linear",
       }}
+      withinPortal={false}
+      zIndex={2000}
+      styles={{ content: { alignSelf: "flex-end" } }}
     >
-      <Text mb="md" fw={600} ta="center">
+      <Text mb="xs" fw={600} ta="center">
         {message}
       </Text>
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Flex, Group, Paper, Text, Stack } from "@mantine/core";
-import type { Habit } from "../../types";
+import type { Habit } from "../../../types";
 import { DndContext, closestCenter, type DragEndEvent } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -11,7 +11,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { IconGripHorizontal } from "@tabler/icons-react";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import { useHabits } from "../../contexts/HabitsContext";
+import { useHabits } from "../../../contexts/HabitsContext";
 
 const SortableHabit = ({ habit }: { habit: Habit }) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({

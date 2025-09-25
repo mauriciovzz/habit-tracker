@@ -6,13 +6,13 @@ import { useHabits } from "./contexts/HabitsContext";
 import type { HabitStyle } from "./types";
 import { IconPlus, IconSettings, IconSun, IconMoon } from "@tabler/icons-react";
 import { AppShell, Button, em, Grid, Group, Text } from "@mantine/core";
-import { ActionButton } from "./components/ActionButton";
-// import { HabitCreationModal } from "./components//HabitCreationModal";
-import { HabitDrawer } from "./components/HabitDrawer";
+import { ActionButton } from "./components/Buttons/ActionButton";
+import { SelectedHabit } from "./components/Drawers/SelectedHabit";
 import { HabitItem } from "./components/HabitItem";
-import { HabitFormDrawer } from "./components/HabitFormDrawer";
-import { SettingsDrawer } from "./components/SettingsDrawer";
+import { HabitForm } from "./components/Drawers/HabitForm";
+import { Settings } from "./components/Drawers/Settings";
 import { useMediaQuery } from "@mantine/hooks";
+import { CustomDrawer } from "./components/Drawers/CustomDrawer";
 
 const currentDate = dayjs().format("YYYY-MM-DD");
 
@@ -96,23 +96,26 @@ export const App = () => {
         </Grid>
       </AppShell.Main>
 
-      <HabitFormDrawer opened={addHabitOpened} onClose={closeAddHabit} />
+      <CustomDrawer opened={addHabitOpened} isMobile={isMobile}>
+        <HabitForm onClose={closeAddHabit} />
+      </CustomDrawer>
 
-      <SettingsDrawer
-        habits={habits}
-        opened={settingsOpened}
-        themeTextColor={themeTextColor}
-        themeBorderColor={themeBorderColor}
-        onClose={closeSettings}
-      />
+      <CustomDrawer opened={settingsOpened} isMobile={isMobile}>
+        <Settings
+          habits={habits}
+          onClose={closeSettings}
+          themeTextColor={themeTextColor}
+          themeBorderColor={themeBorderColor}
+        />
+      </CustomDrawer>
 
-      <HabitDrawer
-        habit={habits.find((h) => h.id === selectedHabitId)}
-        borderTheme={themeBorderColor}
-        habitOpened={habitOpened}
-        closeHabit={closeHabitDrawer}
-        isMobile={isMobile}
-      />
+      <CustomDrawer opened={habitOpened} isMobile={isMobile}>
+        <SelectedHabit
+          habit={habits.find((h) => h.id === selectedHabitId)}
+          onClose={closeHabitDrawer}
+          borderTheme={themeBorderColor}
+        />
+      </CustomDrawer>
     </AppShell>
   );
 };

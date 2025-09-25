@@ -1,10 +1,10 @@
 import { Divider, FileInput, Modal, Stack, Text } from "@mantine/core";
 import { SettingsButton } from "./SettingsButton";
 import { IconFileDownload, IconFileUpload, IconTrash } from "@tabler/icons-react";
-import { useHabits } from "../../contexts/HabitsContext";
-import { ConfirmationModal } from "../ConfirmationModal";
+import { useHabits } from "../../../contexts/HabitsContext";
+import { ConfirmationModal } from "../../ConfirmationModal";
 import { useDisclosure } from "@mantine/hooks";
-import { ButtonGroup } from "../ButtonGroup";
+import { ButtonGroup } from "../../Buttons/ButtonGroup";
 import { useState } from "react";
 
 interface UploadModalProps {
@@ -20,14 +20,16 @@ const UploadModal = ({ opened, file, setFile, onConfirm, onCancel }: UploadModal
     <Modal
       opened={opened}
       onClose={onCancel}
-      styles={{ content: { alignSelf: "flex-end" } }}
       radius="lg"
       withCloseButton={false}
       transitionProps={{
-        transition: "slide-up",
+        transition: "fade-up",
         duration: 250,
         timingFunction: "linear",
       }}
+      withinPortal={false}
+      zIndex={2000}
+      styles={{ content: { alignSelf: "flex-end" } }}
     >
       <Divider
         label="Select a JSON File"

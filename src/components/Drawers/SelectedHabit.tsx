@@ -2,55 +2,46 @@ import dayjs from "dayjs";
 import {
   ActionIcon,
   Divider,
-  Drawer,
   Flex,
   Group,
   RingProgress,
   Text,
   Box,
   Stack,
+  ScrollArea,
 } from "@mantine/core";
 import { Calendar, DatesProvider, type DatePickerProps } from "@mantine/dates";
-import { useDisclosure, useViewportSize } from "@mantine/hooks";
-import type { Habit } from "../types";
-import { useHabits } from "../contexts/HabitsContext";
+import { useDisclosure } from "@mantine/hooks";
+import type { Habit } from "../../types";
+import { useHabits } from "../../contexts/HabitsContext";
 import { useState } from "react";
-import { IconChevronLeft, IconChevronRight, type Icon, type IconProps } from "@tabler/icons-react";
-import { ConfirmationModal } from "./ConfirmationModal";
-import { HabitFormDrawer } from "./HabitFormDrawer";
-import { TextButton } from "./TextButton";
-import { HabitStreaks } from "./HabitStreaks";
-import { HabitHeatmap } from "./HabitHeatmap";
-import { ButtonGroup } from "./ButtonGroup";
+import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+import { ConfirmationModal } from "../ConfirmationModal";
+import { CustomDrawer } from "./CustomDrawer";
+import { HabitForm } from "./HabitForm";
+import { TextButton } from "../Buttons/TextButton";
+import { HabitStreaks } from "../HabitStreaks";
+import { HabitHeatmap } from "../HabitHeatmap";
+import { ButtonGroup } from "../Buttons/ButtonGroup";
 
-interface ArrowButtonPropa {
-  width: number;
-  color: string;
-  onClick: () => void;
-  icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<Icon>>;
-}
-
-const ArrowButton = ({ width, color, onClick, icon }: ArrowButtonPropa) => {
-  const ArrowIcon = icon;
-
-  return (
-    <ActionIcon variant="subtle" w={width} color={color} onClick={onClick}>
-      <ArrowIcon />
-    </ActionIcon>
-  );
-};
-
-interface HabitDrawerProps {
+interface SelectedHabitProps {
   habit: Habit | undefined;
-  habitOpened: boolean;
   borderTheme: string;
-  closeHabit: () => void;
+  onClose: () => void;
+  isMobile?: boolean;
+  drawerButtonWidth?: number;
+  drawerBodyHeight?: number;
 }
 
-export const HabitDrawer = ({ habit, habitOpened, borderTheme, closeHabit }: HabitDrawerProps) => {
+export const SelectedHabit = ({
+  habit,
+  borderTheme,
+  onClose,
+  isMobile,
+  drawerButtonWidth,
+  drawerBodyHeight,
+}: SelectedHabitProps) => {
   const { updateLog, resetHabit, deleteHabit } = useHabits();
-  const { width } = useViewportSize();
-  const buttonsWidth = (width - 32) / 7;
 
   const [editOpened, { open: openEdit, close: closeEdit }] = useDisclosure(false);
   const [deleteOpened, { open: openDelete, close: closeDelete }] = useDisclosure(false);
@@ -61,6 +52,9 @@ export const HabitDrawer = ({ habit, habitOpened, borderTheme, closeHabit }: Hab
   const color = habit?.color ?? "gray";
   const reps = habit?.reps ?? 1;
   const logs = habit?.logs ?? [];
+
+  const buttonWidth = drawerButtonWidth ?? 0;
+  const bodyHeight = drawerBodyHeight ?? 0;
 
   const [date, setDate] = useState(new Date());
 
@@ -109,52 +103,46 @@ export const HabitDrawer = ({ habit, habitOpened, borderTheme, closeHabit }: Hab
   const getDayProps = (date: string) => (habit ? { onClick: () => updateLog(habit, date) } : {});
 
   return (
-    <Drawer.Root
-      opened={habitOpened}
-      onClose={closeHabit}
-      position="bottom"
-      size="96%"
-      radius="16px 16px 0 0"
-      transitionProps={{
-        transition: "slide-up",
-        duration: 250,
-        timingFunction: "linear",
-      }}
-    >
-      <Drawer.Overlay />
+    <Box w="100%">
+      <Flex bg={color} c="white" p="md" h="80px" align="center">
+        <Group w="100%" gap="xs">
+          <TextButton text="Edit" width={buttonWidth} onClick={openEdit} />
+          <Text flex={1} size="xl" lineClamp={2} fw={500} ta="center" style={{ lineHeight: 1.2 }}>
+            {name}
+          </Text>
+          <TextButton text="Back" width={buttonWidth} onClick={onClose} />
+        </Group>
+      </Flex>
 
-      <Drawer.Content>
-        <Drawer.Header>
-          <Group bg={color} c="white" p="md" w="100%" gap="xs">
-            <TextButton text="Edit" width={buttonsWidth} onClick={openEdit} />
-            <Text flex={1} size="xl" lineClamp={2} fw={500} ta="center" style={{ lineHeight: 1.2 }}>
-              {name}
-            </Text>
-            <TextButton text="Back" width={buttonsWidth} onClick={closeHabit} />
-          </Group>
-        </Drawer.Header>
-
-        <Drawer.Body p={0}>
-          {habit ? (
-            <Flex w="100%" direction="column">
-              {/* Calendar */}
+      {habit ? (
+        <>
+          <Box p={0} h={bodyHeight - 80}>
+            <ScrollArea
+              h={bodyHeight - 80 - 1 - 68}
+              scrollbarSize={isMobile ? 6 : 12}
+              type={isMobile ? undefined : "auto"}
+            >
               <Stack w="100%" p="md" gap="0">
                 <Group w="100%" h="48px" justify="space-between" mb="10px">
-                  <ArrowButton
-                    width={buttonsWidth}
+                  <ActionIcon
+                    variant="subtle"
+                    w={buttonWidth}
                     color={color}
                     onClick={showPreviousMonth}
-                    icon={IconChevronLeft}
-                  />
+                  >
+                    <IconChevronLeft />
+                  </ActionIcon>
 
                   <Text fw={500}>{dayjs(date).format("MMMM YYYY")}</Text>
 
-                  <ArrowButton
-                    width={buttonsWidth}
+                  <ActionIcon
+                    variant="subtle"
+                    w={buttonWidth}
                     color={color}
                     onClick={showNextMonth}
-                    icon={IconChevronRight}
-                  />
+                  >
+                    <IconChevronRight />
+                  </ActionIcon>
                 </Group>
 
                 <DatesProvider settings={{ consistentWeeks: true }}>
@@ -191,59 +179,59 @@ export const HabitDrawer = ({ habit, habitOpened, borderTheme, closeHabit }: Hab
 
               <Divider label="Streaks" labelPosition="center" />
 
-              {/* Streaks */}
               <Box w="100%" p="md">
                 <HabitStreaks habit={habit} borderColor={borderTheme} iconColor={color} />
               </Box>
 
               <Divider label="Year completions" labelPosition="center" />
 
-              {/* Streaks */}
               <Box w="100%" p="md">
                 <HabitHeatmap habit={habit} showFullYear />
               </Box>
+            </ScrollArea>
 
-              <Divider />
+            <Divider />
 
-              <Box w="100%" p="md">
-                <ButtonGroup
-                  first={{ text: "Reset habit", color, onClick: openReset }}
-                  second={{ text: "Delete habit", color: "red", onClick: openDelete }}
-                />
-              </Box>
-            </Flex>
-          ) : (
-            <Text c="dimmed" ta="center">
-              No habit selected
-            </Text>
-          )}
-        </Drawer.Body>
-      </Drawer.Content>
+            <Box p="md">
+              <ButtonGroup
+                first={{ text: "Reset habit", color, onClick: openReset }}
+                second={{ text: "Delete habit", color: "red", onClick: openDelete }}
+              />
+            </Box>
 
-      <ConfirmationModal
-        opened={resetOpened}
-        message={`Do you want to reset this habit?`}
-        color={color}
-        onConfirm={() => {
-          void resetHabit(id);
-          closeReset();
-        }}
-        onCancel={closeReset}
-      />
+            <ConfirmationModal
+              opened={resetOpened}
+              message={`Do you want to reset this habit?`}
+              color={color}
+              onConfirm={() => {
+                void resetHabit(id);
+                closeReset();
+              }}
+              onCancel={closeReset}
+            />
 
-      <ConfirmationModal
-        opened={deleteOpened}
-        message={`Do you want to delete this habit?`}
-        color={color}
-        onConfirm={() => {
-          void deleteHabit(id);
-          closeDelete();
-          closeHabit();
-        }}
-        onCancel={closeDelete}
-      />
+            <ConfirmationModal
+              opened={deleteOpened}
+              message={`Do you want to delete this habit?`}
+              color={color}
+              onConfirm={() => {
+                void deleteHabit(id);
+                closeDelete();
+                onClose();
+              }}
+              onCancel={closeDelete}
+            />
 
-      <HabitFormDrawer opened={editOpened} onClose={closeEdit} data={{ id, name, color, reps }} />
-    </Drawer.Root>
+            <CustomDrawer opened={editOpened} isMobile={isMobile}>
+              <HabitForm onClose={closeEdit} data={{ id, name, color, reps }} />
+            </CustomDrawer>
+          </Box>
+        </>
+      ) : (
+        <Text c="dimmed" ta="center">
+          No habit selected
+        </Text>
+      )}
+    </Box>
   );
 };
