@@ -1,10 +1,9 @@
 import dayjs from "dayjs";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useDisclosure, useToggle, useViewportSize } from "@mantine/hooks";
+import { useDisclosure, useViewportSize } from "@mantine/hooks";
 import { useColorScheme } from "./hooks/useColorScheme";
 import { useHabits } from "./contexts/HabitsContext";
-import type { HabitStyle } from "./types";
 import { IconPlus, IconSettings, IconSun, IconMoon } from "@tabler/icons-react";
 import { AppShell, Button, em, Flex, Grid, Group, Text } from "@mantine/core";
 import { ActionButton } from "./components/Buttons/ActionButton";
@@ -14,6 +13,7 @@ import { HabitForm } from "./components/Drawers/HabitForm";
 import { Settings } from "./components/Drawers/Settings";
 import { useMediaQuery } from "@mantine/hooks";
 import { CustomDrawer } from "./components/Drawers/CustomDrawer";
+import { useHabitStyle } from "./hooks/useHabitStyle";
 
 export const App = () => {
   const { t } = useTranslation();
@@ -26,7 +26,7 @@ export const App = () => {
   const [selectedHabitId, setSelectedHabitId] = useState<number | null>(null);
 
   const [addHabitOpened, { open: openAddHabit, close: closeAddHabit }] = useDisclosure(false);
-  const [habitStyle, toggleHabitStyle] = useToggle<HabitStyle>(["simple", "streaks", "dots"]);
+  const [habitStyle, toggleHabitStyle] = useHabitStyle();
   const { colorScheme, themeTextColor, themeBorderColor, toggleColorScheme } = useColorScheme();
   const [settingsOpened, { open: openSettings, close: closeSettings }] = useDisclosure(false);
   const [habitOpened, { open: openHabit, close: closeHabit }] = useDisclosure(false);
