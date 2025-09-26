@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import "dayjs/locale/es";
 import {
   ActionIcon,
   Divider,
@@ -23,6 +24,7 @@ import { TextButton } from "../Buttons/TextButton";
 import { HabitStreaks } from "../HabitStreaks";
 import { HabitHeatmap } from "../HabitHeatmap";
 import { ButtonGroup } from "../Buttons/ButtonGroup";
+import { useTranslation } from "react-i18next";
 
 interface SelectedHabitProps {
   habit: Habit | undefined;
@@ -41,6 +43,8 @@ export const SelectedHabit = ({
   drawerButtonWidth,
   drawerBodyHeight,
 }: SelectedHabitProps) => {
+  const { t, i18n } = useTranslation();
+
   const { updateLog, resetHabit, deleteHabit } = useHabits();
 
   const [editOpened, { open: openEdit, close: closeEdit }] = useDisclosure(false);
@@ -110,11 +114,11 @@ export const SelectedHabit = ({
     <Box w="100%">
       <Flex bg={color} c="white" p="md" h="80px" align="center">
         <Group w="100%" gap="xs">
-          <TextButton text="Edit" width={buttonWidth} onClick={openEdit} />
+          <TextButton text={t("edit")} width={buttonWidth} onClick={openEdit} />
           <Text flex={1} size="xl" lineClamp={2} fw={500} ta="center" style={{ lineHeight: 1.2 }}>
             {name}
           </Text>
-          <TextButton text="Back" width={buttonWidth} onClick={onClose} />
+          <TextButton text={t("back")} width={buttonWidth} onClick={onClose} />
         </Group>
       </Flex>
 
@@ -137,7 +141,10 @@ export const SelectedHabit = ({
                     <IconChevronLeft />
                   </ActionIcon>
 
-                  <Text fw={500}>{dayjs(date).format("MMMM YYYY")}</Text>
+                  <Text fw={500}>
+                    {t(`months.full.${dayjs(date).month().toString()}`)}{" "}
+                    {dayjs(date).format("YYYY")}
+                  </Text>
 
                   <ActionIcon
                     variant="subtle"
@@ -149,15 +156,15 @@ export const SelectedHabit = ({
                   </ActionIcon>
                 </Group>
 
-                <DatesProvider settings={{ consistentWeeks: true }}>
+                <DatesProvider settings={{ locale: i18n.language, consistentWeeks: true }}>
                   <Calendar
                     w="100%"
                     size="lg"
                     level="month"
                     minLevel="month"
                     styles={{
-                      calendarHeader: { display: "none" }, // hides the entire header
-                      calendarHeaderControl: { display: "none" }, // hides month/year button
+                      calendarHeader: { display: "none" },
+                      calendarHeaderControl: { display: "none" },
                       calendarHeaderLevel: { display: "none" },
                       weekday: {
                         fontSize: "small",
@@ -181,16 +188,21 @@ export const SelectedHabit = ({
                 </DatesProvider>
               </Stack>
 
-              <Divider label="Streaks" labelPosition="center" />
+              <Divider label={t("streaks")} labelPosition="center" />
 
               <Box w="100%" p="md">
                 <HabitStreaks habit={habit} borderColor={borderTheme} iconColor={color} />
               </Box>
 
-              <Divider label="Year completions" labelPosition="center" />
+              <Divider label={t("yearDots")} labelPosition="center" />
 
               <Box w="100%" p="md">
-                <HabitHeatmap habit={habit} showFullYear />
+                <HabitHeatmap
+                  habit={habit}
+                  months={Object.values(t("months.short", { returnObjects: true }))}
+                  weekDays={Object.values(t("days.short", { returnObjects: true }))}
+                  showFullYear
+                />
               </Box>
             </ScrollArea>
 
@@ -198,14 +210,14 @@ export const SelectedHabit = ({
 
             <Box p="md">
               <ButtonGroup
-                first={{ text: "Reset habit", color, onClick: openReset }}
-                second={{ text: "Delete habit", color: "red", onClick: openDelete }}
+                first={{ text: t("resetHabit"), color, onClick: openReset }}
+                second={{ text: t("deleteHabit"), color: "red", onClick: openDelete }}
               />
             </Box>
 
             <ConfirmationModal
               opened={resetOpened}
-              message={`Do you want to reset this habit?`}
+              message={t("resetPrompt")}
               color={color}
               onConfirm={() => {
                 void resetHabit(id);
@@ -216,7 +228,7 @@ export const SelectedHabit = ({
 
             <ConfirmationModal
               opened={deleteOpened}
-              message={`Do you want to delete this habit?`}
+              message={t("deletePrompt")}
               color={color}
               onConfirm={() => {
                 void deleteHabit(id);

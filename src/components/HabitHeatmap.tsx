@@ -8,11 +8,13 @@ import { useMemo } from "react";
 interface HabitItemProps {
   habit: Habit;
   showFullYear?: boolean;
+  months?: string[];
+  weekDays?: string[];
 }
 
 const rectSize = 12;
 
-export const HabitHeatmap = ({ habit, showFullYear }: HabitItemProps) => {
+export const HabitHeatmap = ({ habit, months, weekDays, showFullYear }: HabitItemProps) => {
   const { ref, width } = useElementSize();
   const { color, reps, logs } = habit;
 
@@ -61,6 +63,7 @@ export const HabitHeatmap = ({ habit, showFullYear }: HabitItemProps) => {
       startDate={startDate}
       endDate={endDate}
       withMonthLabels={showFullYear}
+      monthLabels={months}
       styles={{
         monthLabel: {
           fontSize: "small",
@@ -77,7 +80,7 @@ export const HabitHeatmap = ({ habit, showFullYear }: HabitItemProps) => {
       <Flex direction="column" h={114} w="32">
         <Space h={14} />
         <Stack flex={1} gap={0} justify="space-between">
-          {["Mon", "Wed", "Fri", "Sun"].map((day) => (
+          {weekDays?.map((day) => (
             <Text key={day} h={15} fw={600} size="xs" c="#868e96">
               {day}
             </Text>

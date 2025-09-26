@@ -13,6 +13,7 @@ import { IconGripHorizontal } from "@tabler/icons-react";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { useHabits } from "../../../contexts/HabitsContext";
 import { useViewportSize } from "@mantine/hooks";
+import { useTranslation } from "react-i18next";
 
 const SortableHabit = ({ habit }: { habit: Habit }) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
@@ -54,6 +55,7 @@ interface HabitReorderWindowProps {
 
 export const HabitReorderWindow = ({ originalHabits, isMobile }: HabitReorderWindowProps) => {
   const { updateHabitPosition } = useHabits();
+  const { t } = useTranslation();
   const [habits, setHabits] = useState(originalHabits);
   const { height } = useViewportSize();
   const finalHeight = isMobile ? height * 0.96 : height;
@@ -76,13 +78,13 @@ export const HabitReorderWindow = ({ originalHabits, isMobile }: HabitReorderWin
 
   return (
     <Stack p="md">
-      <Text size="md" ta="center" c="dimmed" h={25}>
-        Drag the habits from the handle to reorden them
+      <Text size="sm" ta="center" c="dimmed" h={25}>
+        {t("reorderHabitsDescription")}
       </Text>
       {habits.length === 0 ? (
         <Flex align="center" justify="center" h={finalHeight - 80 - 32 - 25 - 16}>
           <Text size="md" fw={600}>
-            No habits to reorder
+            {t("noHabitsReorder")}
           </Text>
         </Flex>
       ) : (

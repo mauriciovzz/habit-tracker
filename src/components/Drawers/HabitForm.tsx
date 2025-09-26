@@ -16,6 +16,7 @@ import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { useEffect } from "react";
 import { useElementSize, useFocusWithin } from "@mantine/hooks";
 import { TextButton } from "../Buttons/TextButton";
+import { useTranslation } from "react-i18next";
 
 const colors = [
   "#FF1A1A", // bright red
@@ -42,6 +43,8 @@ interface HabitFormProps {
 }
 
 export const HabitForm = ({ onClose, data, isMobile, drawerButtonWidth }: HabitFormProps) => {
+  const { t } = useTranslation();
+
   const { addHabit, updateHabit } = useHabits();
   const { ref: focusRef, focused } = useFocusWithin();
   const { ref: sizeRef, width } = useElementSize();
@@ -113,15 +116,15 @@ export const HabitForm = ({ onClose, data, isMobile, drawerButtonWidth }: HabitF
     <Box ref={sizeRef}>
       <Flex bg={form.values.color} c="white" p="md" h="80px" align="center">
         <Text flex={1} size="xl" fw={500} ta="left">
-          {data ? "Edit Habit" : "Add Habit"}
+          {data ? t("editHabit") : t("addHabit")}
         </Text>
-        <TextButton text="Back" width={buttonWidth} onClick={onClose} />
+        <TextButton text={t("back")} width={buttonWidth} onClick={onClose} />
       </Flex>
 
       <Box p={0}>
         <form onSubmit={form.onSubmit(handleFormSubmit)}>
           <Divider
-            label="Name"
+            label={t("name")}
             labelPosition="center"
             pt="md"
             pb={8}
@@ -133,7 +136,7 @@ export const HabitForm = ({ onClose, data, isMobile, drawerButtonWidth }: HabitF
               ref={focusRef}
               radius="md"
               size="md"
-              placeholder="I want to..."
+              placeholder={t("want")}
               key={form.key("name")}
               {...form.getInputProps("name")}
               withAsterisk={false}
@@ -147,7 +150,7 @@ export const HabitForm = ({ onClose, data, isMobile, drawerButtonWidth }: HabitF
           </div>
 
           <Divider
-            label="Color"
+            label={t("color")}
             labelPosition="center"
             pb={8}
             styles={{ label: { fontSize: 16 } }}
@@ -185,7 +188,7 @@ export const HabitForm = ({ onClose, data, isMobile, drawerButtonWidth }: HabitF
             })}
           </Grid>
           <Divider
-            label="Reps"
+            label={t("reps")}
             labelPosition="center"
             pt="md"
             pb={8}
@@ -202,7 +205,7 @@ export const HabitForm = ({ onClose, data, isMobile, drawerButtonWidth }: HabitF
             >
               <Flex align="center">
                 <Text>{form.values.reps}</Text>
-                <Text size="xs">&nbsp;/ day</Text>
+                <Text size="xs">&nbsp;/ {t("day")}</Text>
               </Flex>
             </ActionIcon.GroupSection>
 
@@ -219,7 +222,7 @@ export const HabitForm = ({ onClose, data, isMobile, drawerButtonWidth }: HabitF
 
           <Box p="md">
             <Button w="100%" color={form.values.color} type="submit">
-              {data ? "Update" : "Save"}
+              {data ? t("update") : t("save")}
             </Button>
           </Box>
         </form>

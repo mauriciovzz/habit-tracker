@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useDisclosure, useToggle, useViewportSize } from "@mantine/hooks";
 import { useColorScheme } from "./hooks/useColorScheme";
 import { useHabits } from "./contexts/HabitsContext";
@@ -15,6 +16,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import { CustomDrawer } from "./components/Drawers/CustomDrawer";
 
 export const App = () => {
+  const { t } = useTranslation();
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
 
   const { habits } = useHabits();
@@ -24,7 +26,7 @@ export const App = () => {
   const [selectedHabitId, setSelectedHabitId] = useState<number | null>(null);
 
   const [addHabitOpened, { open: openAddHabit, close: closeAddHabit }] = useDisclosure(false);
-  const [habitStyle, toggleHabitStyle] = useToggle<HabitStyle>(["simple", "streaks", "chart"]);
+  const [habitStyle, toggleHabitStyle] = useToggle<HabitStyle>(["simple", "streaks", "dots"]);
   const { colorScheme, themeTextColor, themeBorderColor, toggleColorScheme } = useColorScheme();
   const [settingsOpened, { open: openSettings, close: closeSettings }] = useDisclosure(false);
   const [habitOpened, { open: openHabit, close: closeHabit }] = useDisclosure(false);
@@ -49,7 +51,7 @@ export const App = () => {
         <Group h="100%" px="md">
           <Group justify="space-between" style={{ flex: 1 }}>
             <Text size="lg" fw={700}>
-              Habits
+              {t("appTitle")}
             </Text>
 
             <Group gap={10}>
@@ -64,7 +66,7 @@ export const App = () => {
                 }}
               >
                 <Text w="100%" ta="center" size="sm" fw={500}>
-                  {habitStyle}
+                  {t(habitStyle)}
                 </Text>
               </Button>
               <ActionButton

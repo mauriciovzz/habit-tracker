@@ -40,7 +40,6 @@ export const HabitItem = ({
   const progress = (count / reps) * 100;
   const isTodayComplete = progress >= 100;
 
-  // handele colors
   const borderColor = isTodayComplete ? color : themeBorderColor;
 
   return (
@@ -83,7 +82,7 @@ export const HabitItem = ({
           />
         )}
 
-        {habitStyle === "chart" && <HabitHeatmap habit={habit} />}
+        {habitStyle === "dots" && <HabitHeatmap habit={habit} />}
       </Stack>
     </Paper>
   );

@@ -18,6 +18,7 @@ import { ConfirmationModal } from "../../ConfirmationModal";
 import { useDisclosure } from "@mantine/hooks";
 import { useHabits } from "../../../contexts/HabitsContext";
 import { ButtonGroup } from "../../Buttons/ButtonGroup";
+import { useTranslation } from "react-i18next";
 
 const HeaderTransition = ({
   mounted,
@@ -104,6 +105,13 @@ export const Settings = ({
     }, 200);
   };
 
+  const { t, i18n } = useTranslation();
+  const toggleLenguage = async () => {
+    const currentLanguage = i18n.language;
+
+    await i18n.changeLanguage(currentLanguage === "en" ? "es" : "en");
+  };
+
   return (
     <Box>
       <Flex
@@ -116,13 +124,17 @@ export const Settings = ({
           align="center"
           style={{ flex: 1, position: "relative", overflow: "hidden", height: "100%" }}
         >
-          <HeaderTransition mounted={view === "menu"} trans="slide-right" text="Settings" />
-          <HeaderTransition mounted={view === "reorder"} trans="slide-left" text="Reorder Habits" />
-          <HeaderTransition mounted={view === "data"} trans="slide-left" text="Manage Data" />
+          <HeaderTransition mounted={view === "menu"} trans="slide-right" text={t("settings")} />
+          <HeaderTransition
+            mounted={view === "reorder"}
+            trans="slide-left"
+            text={t("reorderHabits")}
+          />
+          <HeaderTransition mounted={view === "data"} trans="slide-left" text={t("manageData")} />
         </Flex>
 
         <TextButton
-          text="Back"
+          text={t("back")}
           width={buttonsWidth}
           onClick={
             view === "menu"
@@ -139,7 +151,14 @@ export const Settings = ({
         <BodyTransition
           mounted={view === "menu"}
           trans="slide-right"
-          body={<MainWindow setView={setView} />}
+          body={
+            <MainWindow
+              setView={setView}
+              toggleLenguage={() => {
+                void toggleLenguage();
+              }}
+            />
+          }
         />
         <BodyTransition
           mounted={view === "reorder"}
@@ -163,7 +182,7 @@ export const Settings = ({
 
       <ConfirmationModal
         opened={deleteOpened}
-        message={`Do you want to delete all data?`}
+        message={t("DeleteDataQuestion")}
         color="gray"
         onConfirm={() => {
           void deleteData();
@@ -188,7 +207,7 @@ export const Settings = ({
         styles={{ content: { alignSelf: "flex-end" } }}
       >
         <Divider
-          label="Select a JSON File"
+          label={t("selectJson")}
           labelPosition="center"
           mb="7"
           styles={{ label: { fontSize: 16 } }}
@@ -199,12 +218,12 @@ export const Settings = ({
         <Divider my="md" />
 
         <Text mb="xs" fw={600} ta="center">
-          Do you want to replace exising data?
+          {t("uploadDataQuestion")}
         </Text>
         <ButtonGroup
-          first={{ text: "No", color: "gray", onClick: closeUpload }}
+          first={{ text: t("no"), color: "gray", onClick: closeUpload }}
           second={{
-            text: "Yes",
+            text: t("yes"),
             color: "red",
             onClick: () => {
               if (file) {

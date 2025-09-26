@@ -1,6 +1,7 @@
 import { Stack } from "@mantine/core";
 import { SettingsButton } from "./SettingsButton";
 import { IconFileDownload, IconFileUpload, IconTrash } from "@tabler/icons-react";
+import { useTranslation } from "react-i18next";
 
 interface DataManagementWindowProps {
   downloadData: () => void;
@@ -13,25 +14,27 @@ export const DataManagementWindow = ({
   openDelete,
   openUpload,
 }: DataManagementWindowProps) => {
+  const { t } = useTranslation();
+
   return (
     <Stack p="md">
       <Stack w="100%" h="100%" gap="md">
         <SettingsButton
           icon={IconFileDownload}
-          header="Download app data"
-          description="Get your data to use it in other devices"
+          header={t("downloadData")}
+          description={t("downloadDataPrompt")}
           onClick={downloadData}
         />
         <SettingsButton
           icon={IconFileUpload}
-          header="Upload new app Data"
-          description="Replace the data in this device"
+          header={t("uploadData")}
+          description={t("uploadDataPrompt")}
           onClick={openUpload}
         />
         <SettingsButton
           icon={IconTrash}
-          header="Delete app Data"
-          description="Erase all habit data from this device"
+          header={t("deleteData")}
+          description={t("DeleteDataPrompt")}
           onClick={openDelete}
         />
       </Stack>

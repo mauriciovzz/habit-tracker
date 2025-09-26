@@ -1,5 +1,6 @@
 import { Modal, Text } from "@mantine/core";
 import { ButtonGroup } from "./Buttons/ButtonGroup";
+import { useTranslation } from "react-i18next";
 
 interface ConfrimationModalProps {
   opened: boolean;
@@ -16,6 +17,8 @@ export const ConfirmationModal = ({
   onConfirm,
   onCancel,
 }: ConfrimationModalProps) => {
+  const { t } = useTranslation();
+
   return (
     <Modal
       opened={opened}
@@ -36,8 +39,8 @@ export const ConfirmationModal = ({
       </Text>
 
       <ButtonGroup
-        first={{ text: "No", color, onClick: onCancel }}
-        second={{ text: "Yes", color: "red", onClick: onConfirm }}
+        first={{ text: t("no"), color, onClick: onCancel }}
+        second={{ text: t("yes"), color: "red", onClick: onConfirm }}
       />
     </Modal>
   );

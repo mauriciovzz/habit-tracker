@@ -1,0 +1,93 @@
+{
+  "appTitle": "Habits",
+  "simple" : "Simple",
+  "streaks" : "Streaks",
+  "dots" : "Dots",
+
+  "current": "Current",
+  "best": "Best",
+  "total": "Total times",
+
+  "addHabit": "Add Habit",
+  "editHabit": "Edit Habit",
+  "edit": "Edit",
+  "back": "Back",
+  "name": "Name",
+  "want": "I want to...",
+  "color": "Color",
+  "reps": "Repetitions",
+  "day": "day",
+  "update": "Update",
+  "save": "Save",
+
+  "yearDots": "Year dots",
+  "resetHabit": "Reset Habit",
+  "resetPrompt": "Do you want to reset this habit?",
+  "deleteHabit": "Delete Habit",
+  "deletePrompt": "Do you want to delete this habit?",
+  "no": "No",
+  "yes": "Yes",
+
+  "months": {
+    "full": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
+    "short": [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ]
+  },
+  "days": {
+    "short": [
+      "Mon",
+      "Wed",
+      "Fri",
+      "Sun"
+    ]
+  },
+  "settings": "Settings",
+
+  "reorderHabits": "Reorder Habits",
+  "reorderHabitsPrompt": "Change the order of  your habits",
+  "reorderHabitsDescription": "Drag the habits from their grip to reorder them",
+  "noHabitsReorder": "No habits to reorder",
+
+  "manageData": "Manage Data",
+  "manageDataPrompt": "Download, upload or delete app data",
+
+  "downloadData": "Download app data",
+  "downloadDataPrompt": "Get your data to use it in other devices",
+
+  "uploadData": "Upload new app data",
+  "uploadDataPrompt": "Replace the data in this device",
+  "selectJson": "Select a JSON File",
+  "uploadDataQuestion": "Do you want to replace exising data?",
+
+  "deleteData": "Delete app data",
+  "DeleteDataPrompt": "Erase all habit data from this device",
+  "DeleteDataQuestion": "Do you want to delete all data?",
+
+  "toggleLenguage": "Español",
+  "toggleLenguagePrompt": "Click to switch to spanish"
+}
