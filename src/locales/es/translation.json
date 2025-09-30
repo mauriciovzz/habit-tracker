@@ -3,6 +3,7 @@
   "simple" : "Simple",
   "streaks" : "Rachas",
   "dots" : "Puntos",
+  "NoHabitsMessage": "Agrega un habito haciendo click en +",
 
   "current": "Actual",
   "best": "Mejor",

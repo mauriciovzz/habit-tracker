@@ -5,7 +5,7 @@ import { useDisclosure, useViewportSize } from "@mantine/hooks";
 import { useColorScheme } from "./hooks/useColorScheme";
 import { useHabits } from "./contexts/HabitsContext";
 import { IconPlus, IconSettings, IconSun, IconMoon } from "@tabler/icons-react";
-import { AppShell, Button, em, Flex, Grid, Group, Text } from "@mantine/core";
+import { AppShell, Button, em, Flex, Grid, Group, Text, Loader } from "@mantine/core";
 import { ActionButton } from "./components/Buttons/ActionButton";
 import { SelectedHabit } from "./components/Drawers/SelectedHabit";
 import { HabitItem } from "./components/HabitItem";
@@ -19,7 +19,7 @@ export const App = () => {
   const { t } = useTranslation();
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
 
-  const { habits } = useHabits();
+  const { habits, loadingHabits } = useHabits();
   const { height } = useViewportSize();
 
   const [currentDate, setCurrentDate] = useState(dayjs().format("YYYY-MM-DD"));
@@ -80,10 +80,14 @@ export const App = () => {
       </AppShell.Header>
 
       <AppShell.Main>
-        {habits.length === 0 ? (
+        {loadingHabits ? (
+          <Flex align="center" justify="center" h={height - 76 - 32}>
+            <Loader color={themeBorderColor} size="lg" />
+          </Flex>
+        ) : habits.length === 0 ? (
           <Flex align="center" justify="center" h={height - 76 - 32}>
             <Text size="md" fw={600}>
-              Add a new habit clicking on +
+              {t("NoHabitsMessage")}
             </Text>
           </Flex>
         ) : (

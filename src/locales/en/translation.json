@@ -3,6 +3,7 @@
   "simple" : "Simple",
   "streaks" : "Streaks",
   "dots" : "Dots",
+  "NoHabitsMessage": "Add an habit clicking on +",
 
   "current": "Current",
   "best": "Best",

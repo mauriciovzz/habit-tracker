@@ -5,6 +5,7 @@ import { HabitsContext } from "./HabitsContext";
 
 export const HabitsProvider = ({ children }: { children: ReactNode }) => {
   const [habits, setHabits] = useState<Habit[]>([]);
+  const [loadingHabits, setLoadingHabits] = useState(true);
 
   const getHabits = async () => {
     await habitsService.updateAllStreaks();
@@ -13,6 +14,9 @@ export const HabitsProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     void getHabits();
+    setTimeout(() => {
+      setLoadingHabits(false);
+    }, 250);
   }, []);
 
   const addHabit = async (data: HabitCretionProps) => {
@@ -36,10 +40,7 @@ export const HabitsProvider = ({ children }: { children: ReactNode }) => {
 
     if (habitIndex === -1) return;
 
-    // remove habit from old index
     const [moved] = updated.splice(fromPosition, 1);
-
-    // insert habit into new index
     updated.splice(toPosition, 0, moved);
 
     setHabits(
@@ -117,6 +118,7 @@ export const HabitsProvider = ({ children }: { children: ReactNode }) => {
     <HabitsContext.Provider
       value={{
         habits,
+        loadingHabits,
         addHabit,
         updateHabit,
         updateHabitPosition,

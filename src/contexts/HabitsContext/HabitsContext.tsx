@@ -3,6 +3,7 @@ import type { Habit, HabitCretionProps, HabitUpdateProps } from "../../types";
 
 interface HabitsContextType {
   habits: Habit[];
+  loadingHabits: boolean;
   addHabit: (data: HabitCretionProps) => Promise<void>;
   updateHabit: (data: HabitUpdateProps) => Promise<void>;
   updateHabitPosition: (habitId: number, fromPosition: number, toPosition: number) => Promise<void>;
