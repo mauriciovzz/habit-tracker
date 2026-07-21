@@ -1,5 +1,10 @@
 import { type ReactNode, useState, useEffect } from "react";
-import type { Habit, HabitCretionProps, HabitUpdateProps, Log } from "../../types";
+import type {
+  Habit,
+  HabitCretionProps,
+  HabitUpdateProps,
+  Log,
+} from "../../types";
 import habitsService from "../../services/habitsService";
 import { HabitsContext } from "./HabitsContext";
 
@@ -27,11 +32,17 @@ export const HabitsProvider = ({ children }: { children: ReactNode }) => {
   const updateHabit = async (data: HabitUpdateProps) => {
     const updatedHabit = await habitsService.update(data);
     if (updatedHabit) {
-      setHabits((prev) => prev.map((h) => (h.id === data.id ? updatedHabit : h)));
+      setHabits((prev) =>
+        prev.map((h) => (h.id === data.id ? updatedHabit : h)),
+      );
     }
   };
 
-  const updateHabitPosition = async (habitId: number, fromPosition: number, toPosition: number) => {
+  const updateHabitPosition = async (
+    habitId: number,
+    fromPosition: number,
+    toPosition: number,
+  ) => {
     await habitsService.updatePosition(habitId, fromPosition, toPosition);
 
     const updated = [...habits];
@@ -47,14 +58,18 @@ export const HabitsProvider = ({ children }: { children: ReactNode }) => {
       updated.map((h, index) => ({
         ...h,
         position: index,
-      }))
+      })),
     );
   };
 
   const resetHabit = async (habitId: number) => {
     await habitsService.reset(habitId);
     setHabits((prev) =>
-      prev.map((h) => (h.id === habitId ? { ...h, logs: [], bestStreak: 0, currentStreak: 0 } : h))
+      prev.map((h) =>
+        h.id === habitId
+          ? { ...h, logs: [], bestStreak: 0, currentStreak: 0 }
+          : h,
+      ),
     );
   };
 
@@ -77,8 +92,8 @@ export const HabitsProvider = ({ children }: { children: ReactNode }) => {
               currentStreak: updatedData.currentStreak,
               bestStreak: updatedData.bestStreak,
             }
-          : h
-      )
+          : h,
+      ),
     );
   };
 

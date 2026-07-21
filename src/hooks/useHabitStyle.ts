@@ -5,7 +5,9 @@ const styles: HabitStyle[] = ["simple", "streaks", "dots"];
 
 export function useHabitStyle() {
   const [habitStyle, setHabitStyle] = useState<HabitStyle>(() => {
-    return (localStorage.getItem("habit-style") as HabitStyle | null) ?? "simple";
+    return (
+      (localStorage.getItem("habit-style") as HabitStyle | null) ?? "simple"
+    );
   });
 
   const toggleHabitStyle = useCallback((next?: HabitStyle) => {

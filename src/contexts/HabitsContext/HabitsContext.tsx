@@ -6,7 +6,11 @@ interface HabitsContextType {
   loadingHabits: boolean;
   addHabit: (data: HabitCretionProps) => Promise<void>;
   updateHabit: (data: HabitUpdateProps) => Promise<void>;
-  updateHabitPosition: (habitId: number, fromPosition: number, toPosition: number) => Promise<void>;
+  updateHabitPosition: (
+    habitId: number,
+    fromPosition: number,
+    toPosition: number,
+  ) => Promise<void>;
   resetHabit: (habitId: number) => Promise<void>;
   deleteHabit: (habitId: number) => Promise<void>;
   updateLog: (habit: Habit, date: string) => Promise<void>;
@@ -15,7 +19,9 @@ interface HabitsContextType {
   deleteData: () => Promise<void>;
 }
 
-export const HabitsContext = createContext<HabitsContextType | undefined>(undefined);
+export const HabitsContext = createContext<HabitsContextType | undefined>(
+  undefined,
+);
 
 export const useHabits = () => {
   const context = useContext(HabitsContext);

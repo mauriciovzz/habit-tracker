@@ -25,7 +25,14 @@ const StreakItem = ({ text, number, color }: StreakItemProps) => {
       <Text w="100%" size="xs" fw={600} ta="center" pb="3">
         {t(text)}
       </Text>
-      <Group flex={1} gap={5} h={25} justify="center" align="center" pos="relative">
+      <Group
+        flex={1}
+        gap={5}
+        h={25}
+        justify="center"
+        align="center"
+        pos="relative"
+      >
         <Text size="sm" fw={500} ta="center">
           {number}
         </Text>
@@ -41,7 +48,11 @@ interface HabitStreaksProps {
   iconColor?: string;
 }
 
-export const HabitStreaks = ({ habit, borderColor, iconColor }: HabitStreaksProps) => {
+export const HabitStreaks = ({
+  habit,
+  borderColor,
+  iconColor,
+}: HabitStreaksProps) => {
   const { currentStreak, bestStreak, reps, logs } = habit;
   const completedLogs = logs.filter((key) => key.count === reps).length;
 

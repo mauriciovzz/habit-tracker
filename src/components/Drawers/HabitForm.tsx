@@ -42,7 +42,12 @@ interface HabitFormProps {
   drawerButtonWidth?: number;
 }
 
-export const HabitForm = ({ onClose, data, isMobile, drawerButtonWidth }: HabitFormProps) => {
+export const HabitForm = ({
+  onClose,
+  data,
+  isMobile,
+  drawerButtonWidth,
+}: HabitFormProps) => {
   const { t } = useTranslation();
 
   const { addHabit, updateHabit } = useHabits();
@@ -76,7 +81,8 @@ export const HabitForm = ({ onClose, data, isMobile, drawerButtonWidth }: HabitF
 
         return null;
       },
-      reps: (value) => (value < 1 || value > 50 ? "value must be between 1 and 30" : null),
+      reps: (value) =>
+        value < 1 || value > 50 ? "value must be between 1 and 30" : null,
     },
   });
 
@@ -156,7 +162,12 @@ export const HabitForm = ({ onClose, data, isMobile, drawerButtonWidth }: HabitF
             styles={{ label: { fontSize: 16 } }}
           />
 
-          <Grid grow gutter={isMobile ? (width - 32 - 42 * 7) / 6 : "md"} columns={7} px="md">
+          <Grid
+            grow
+            gutter={isMobile ? (width - 32 - 42 * 7) / 6 : "md"}
+            columns={7}
+            px="md"
+          >
             {colors.map((hex) => {
               return (
                 <Grid.Col key={hex} span={1}>
@@ -209,11 +220,23 @@ export const HabitForm = ({ onClose, data, isMobile, drawerButtonWidth }: HabitF
               </Flex>
             </ActionIcon.GroupSection>
 
-            <ActionIcon variant="default" radius="md" h="100%" w="50%" onClick={decrement}>
+            <ActionIcon
+              variant="default"
+              radius="md"
+              h="100%"
+              w="50%"
+              onClick={decrement}
+            >
               <IconMinus size="20" />
             </ActionIcon>
 
-            <ActionIcon variant="default" radius="md" h="100%" w="50%" onClick={increment}>
+            <ActionIcon
+              variant="default"
+              radius="md"
+              h="100%"
+              w="50%"
+              onClick={increment}
+            >
               <IconPlus size="20" />
             </ActionIcon>
           </ActionIcon.Group>

@@ -14,7 +14,12 @@ interface HabitItemProps {
 
 const rectSize = 12;
 
-export const HabitHeatmap = ({ habit, months, weekDays, showFullYear }: HabitItemProps) => {
+export const HabitHeatmap = ({
+  habit,
+  months,
+  weekDays,
+  showFullYear,
+}: HabitItemProps) => {
   const { ref, width } = useElementSize();
   const { color, reps, logs } = habit;
 

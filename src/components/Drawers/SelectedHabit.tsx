@@ -47,9 +47,12 @@ export const SelectedHabit = ({
 
   const { updateLog, resetHabit, deleteHabit } = useHabits();
 
-  const [editOpened, { open: openEdit, close: closeEdit }] = useDisclosure(false);
-  const [deleteOpened, { open: openDelete, close: closeDelete }] = useDisclosure(false);
-  const [resetOpened, { open: openReset, close: closeReset }] = useDisclosure(false);
+  const [editOpened, { open: openEdit, close: closeEdit }] =
+    useDisclosure(false);
+  const [deleteOpened, { open: openDelete, close: closeDelete }] =
+    useDisclosure(false);
+  const [resetOpened, { open: openReset, close: closeReset }] =
+    useDisclosure(false);
 
   const id = habit?.id ?? 0;
   const name = habit?.name ?? "no habit selected";
@@ -108,14 +111,22 @@ export const SelectedHabit = ({
     );
   };
 
-  const getDayProps = (date: string) => (habit ? { onClick: () => updateLog(habit, date) } : {});
+  const getDayProps = (date: string) =>
+    habit ? { onClick: () => updateLog(habit, date) } : {};
 
   return (
     <Box w="100%">
       <Flex bg={color} c="white" p="md" h="80px" align="center">
         <Group w="100%" gap="xs">
           <TextButton text={t("edit")} width={buttonWidth} onClick={openEdit} />
-          <Text flex={1} size="xl" lineClamp={2} fw={500} ta="center" style={{ lineHeight: 1.2 }}>
+          <Text
+            flex={1}
+            size="xl"
+            lineClamp={2}
+            fw={500}
+            ta="center"
+            style={{ lineHeight: 1.2 }}
+          >
             {name}
           </Text>
           <TextButton text={t("back")} width={buttonWidth} onClick={onClose} />
@@ -156,7 +167,9 @@ export const SelectedHabit = ({
                   </ActionIcon>
                 </Group>
 
-                <DatesProvider settings={{ locale: i18n.language, consistentWeeks: true }}>
+                <DatesProvider
+                  settings={{ locale: i18n.language, consistentWeeks: true }}
+                >
                   <Calendar
                     w="100%"
                     size="lg"
@@ -191,7 +204,11 @@ export const SelectedHabit = ({
               <Divider label={t("streaks")} labelPosition="center" />
 
               <Box w="100%" p="md">
-                <HabitStreaks habit={habit} borderColor={borderTheme} iconColor={color} />
+                <HabitStreaks
+                  habit={habit}
+                  borderColor={borderTheme}
+                  iconColor={color}
+                />
               </Box>
 
               <Divider label={t("yearDots")} labelPosition="center" />
@@ -199,8 +216,12 @@ export const SelectedHabit = ({
               <Box w="100%" p="md">
                 <HabitHeatmap
                   habit={habit}
-                  months={Object.values(t("months.short", { returnObjects: true }))}
-                  weekDays={Object.values(t("days.short", { returnObjects: true }))}
+                  months={Object.values(
+                    t("months.short", { returnObjects: true }),
+                  )}
+                  weekDays={Object.values(
+                    t("days.short", { returnObjects: true }),
+                  )}
                   showFullYear
                 />
               </Box>
@@ -211,7 +232,11 @@ export const SelectedHabit = ({
             <Box p="md">
               <ButtonGroup
                 first={{ text: t("resetHabit"), color, onClick: openReset }}
-                second={{ text: t("deleteHabit"), color: "red", onClick: openDelete }}
+                second={{
+                  text: t("deleteHabit"),
+                  color: "red",
+                  onClick: openDelete,
+                }}
               />
             </Box>
 

@@ -29,6 +29,6 @@ if (rootElement) {
           <App />
         </HabitsProvider>
       </MantineProvider>
-    </StrictMode>
+    </StrictMode>,
   );
 }

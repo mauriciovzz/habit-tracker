@@ -1,8 +1,8 @@
 {
   "appTitle": "Habits",
-  "simple" : "Simple",
-  "streaks" : "Streaks",
-  "dots" : "Dots",
+  "simple": "Simple",
+  "streaks": "Streaks",
+  "dots": "Dots",
   "NoHabitsMessage": "Add an habit clicking on +",
 
   "current": "Current",
@@ -60,12 +60,7 @@
     ]
   },
   "days": {
-    "short": [
-      "Mon",
-      "Wed",
-      "Fri",
-      "Sun"
-    ]
+    "short": ["Mon", "Wed", "Fri", "Sun"]
   },
   "settings": "Settings",
 

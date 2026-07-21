@@ -4,7 +4,13 @@ import isYesterday from "dayjs/plugin/isYesterday";
 dayjs.extend(isToday);
 dayjs.extend(isYesterday);
 import { db } from "../db";
-import type { Habit, HabitCretionProps, HabitUpdateProps, Log, LogData } from "../types";
+import type {
+  Habit,
+  HabitCretionProps,
+  HabitUpdateProps,
+  Log,
+  LogData,
+} from "../types";
 import Dexie from "dexie";
 
 interface Streaks {
@@ -21,17 +27,31 @@ const getLogsForHabit = async (habitId: number): Promise<LogData[]> => {
   return logs.map(({ date, count }) => ({ date, count }));
 };
 
-const addLog = async ({ habitId, date }: { habitId: number; date: string }): Promise<LogData[]> => {
+const addLog = async ({
+  habitId,
+  date,
+}: {
+  habitId: number;
+  date: string;
+}): Promise<LogData[]> => {
   await db.logs.add({ habitId, date, count: 1 });
   return getLogsForHabit(habitId);
 };
 
-const updateLogCount = async ({ habitId, date, count }: Log): Promise<LogData[]> => {
+const updateLogCount = async ({
+  habitId,
+  date,
+  count,
+}: Log): Promise<LogData[]> => {
   await db.logs.update([habitId, date], { count: count });
   return getLogsForHabit(habitId);
 };
 
-const updateStreaks = async (id: number, reps: number, logs: LogData[]): Promise<Streaks> => {
+const updateStreaks = async (
+  id: number,
+  reps: number,
+  logs: LogData[],
+): Promise<Streaks> => {
   const completedLogs = logs.filter((l) => l.count === reps);
 
   if (completedLogs.length === 0) {
@@ -57,7 +77,8 @@ const updateStreaks = async (id: number, reps: number, logs: LogData[]): Promise
   }
 
   const lastCheck = dayjs(completedLogs[completedLogs.length - 1].date);
-  const realCurrentStreak = lastCheck.isToday() || lastCheck.isYesterday() ? currentStreak : 0;
+  const realCurrentStreak =
+    lastCheck.isToday() || lastCheck.isYesterday() ? currentStreak : 0;
 
   const newStreaks = {
     currentStreak: realCurrentStreak,
@@ -81,7 +102,11 @@ const getAll = async (): Promise<Habit[]> => {
   return habits;
 };
 
-const add = async ({ name, color, reps }: HabitCretionProps): Promise<Habit> => {
+const add = async ({
+  name,
+  color,
+  reps,
+}: HabitCretionProps): Promise<Habit> => {
   const position = await db.habits.count();
 
   const newHabit = {
@@ -102,7 +127,12 @@ const reset = async (habitId: number): Promise<void> => {
   await db.habits.update(habitId, { currentStreak: 0, bestStreak: 0 });
 };
 
-const update = async ({ id, name, color, reps }: HabitUpdateProps): Promise<Habit | undefined> => {
+const update = async ({
+  id,
+  name,
+  color,
+  reps,
+}: HabitUpdateProps): Promise<Habit | undefined> => {
   const originalHabit = await db.habits.get(id);
   if (!originalHabit) return undefined;
 
@@ -123,7 +153,11 @@ const update = async ({ id, name, color, reps }: HabitUpdateProps): Promise<Habi
   return updatedHabit;
 };
 
-const updatePosition = async (habitId: number, fromPosition: number, toPosition: number) => {
+const updatePosition = async (
+  habitId: number,
+  fromPosition: number,
+  toPosition: number,
+) => {
   if (fromPosition === toPosition) return;
 
   await db.transaction("rw", db.habits, async () => {
@@ -185,9 +219,16 @@ const updateHabitLog = async (habit: Habit, date: string) => {
   // increment count + update streaks if its complete
   if (log) {
     const newCount = log.count + 1;
-    const updatedLogs = await updateLogCount({ habitId: id, date, count: newCount });
+    const updatedLogs = await updateLogCount({
+      habitId: id,
+      date,
+      count: newCount,
+    });
 
-    let streaks = { currentStreak: habit.currentStreak, bestStreak: habit.bestStreak };
+    let streaks = {
+      currentStreak: habit.currentStreak,
+      bestStreak: habit.bestStreak,
+    };
 
     if (newCount === reps) {
       streaks = await updateStreaks(habit.id, habit.reps, updatedLogs);
@@ -198,7 +239,10 @@ const updateHabitLog = async (habit: Habit, date: string) => {
 
   // create log + update streaks if its complete
   const updatedLogs = await addLog({ habitId: id, date });
-  let streaks = { currentStreak: habit.currentStreak, bestStreak: habit.bestStreak };
+  let streaks = {
+    currentStreak: habit.currentStreak,
+    bestStreak: habit.bestStreak,
+  };
 
   if (reps === 1) {
     streaks = await updateStreaks(habit.id, habit.reps, updatedLogs);

@@ -1,8 +1,8 @@
 {
   "appTitle": "Habitos",
-  "simple" : "Simple",
-  "streaks" : "Rachas",
-  "dots" : "Puntos",
+  "simple": "Simple",
+  "streaks": "Rachas",
+  "dots": "Puntos",
   "NoHabitsMessage": "Agrega un habito haciendo click en +",
 
   "current": "Actual",
@@ -60,12 +60,7 @@
     ]
   },
   "days": {
-    "short": [
-      "Lun",
-      "Mié",
-      "Vie",
-      "Dom"
-    ]
+    "short": ["Lun", "Mié", "Vie", "Dom"]
   },
 
   "settings": "Ajustes",
@@ -89,7 +84,6 @@
   "deleteData": "Eliminar datos de la aplicación",
   "DeleteDataPrompt": "Borra todos los datos en este dispositivo",
   "DeleteDataQuestion": "¿Quieres eliminar todos los datos?",
-
 
   "toggleLenguage": "English",
   "toggleLenguagePrompt": "Haga click para cambiar a ingles"

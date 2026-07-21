@@ -7,7 +7,12 @@ interface TextButtonProps {
   onClick: () => void;
 }
 
-export const TextButton = ({ width, text, customColor, onClick }: TextButtonProps) => {
+export const TextButton = ({
+  width,
+  text,
+  customColor,
+  onClick,
+}: TextButtonProps) => {
   return (
     <Button
       w={width}

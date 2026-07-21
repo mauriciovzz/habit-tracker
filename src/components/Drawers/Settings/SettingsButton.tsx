@@ -8,7 +8,12 @@ interface SettingsButtonProps {
   onClick: () => void;
 }
 
-export const SettingsButton = ({ icon, header, description, onClick }: SettingsButtonProps) => {
+export const SettingsButton = ({
+  icon,
+  header,
+  description,
+  onClick,
+}: SettingsButtonProps) => {
   const SettingIcon = icon;
   return (
     <Button

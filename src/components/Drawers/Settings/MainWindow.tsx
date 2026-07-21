@@ -1,6 +1,10 @@
 import { Stack } from "@mantine/core";
 import { SettingsButton } from "./SettingsButton";
-import { IconArrowsShuffle, IconFolderDown, IconMessageLanguage } from "@tabler/icons-react";
+import {
+  IconArrowsShuffle,
+  IconFolderDown,
+  IconMessageLanguage,
+} from "@tabler/icons-react";
 import type { SettingsView } from "../../../types";
 import { useTranslation } from "react-i18next";
 

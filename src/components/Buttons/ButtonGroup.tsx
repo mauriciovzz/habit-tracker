@@ -15,10 +15,20 @@ export const ButtonGroup = ({ first, second }: AcceptDeclineButtonsProps) => {
 
   return (
     <Group w="100%">
-      <Button flex={1} color={first.color} variant="filled" onClick={first.onClick}>
+      <Button
+        flex={1}
+        color={first.color}
+        variant="filled"
+        onClick={first.onClick}
+      >
         {first.text}
       </Button>
-      <Button flex={1} color={secondColor} variant="filled" onClick={second.onClick}>
+      <Button
+        flex={1}
+        color={secondColor}
+        variant="filled"
+        onClick={second.onClick}
+      >
         {second.text}
       </Button>
     </Group>

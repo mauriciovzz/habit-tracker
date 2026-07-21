@@ -47,7 +47,13 @@ export const HabitItem = ({
       <Stack gap={0}>
         <Flex justify="center">
           <Group w="100%">
-            <Text flex={1} size="md" lineClamp={2} fw={500} style={{ lineHeight: 1.2 }}>
+            <Text
+              flex={1}
+              size="md"
+              lineClamp={2}
+              fw={500}
+              style={{ lineHeight: 1.2 }}
+            >
               {name}
             </Text>
 

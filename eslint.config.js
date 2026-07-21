@@ -1,16 +1,16 @@
-import eslint from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import tseslint from 'typescript-eslint'
-import prettier from 'eslint-config-prettier'
-import eslintPluginPrettier from 'eslint-plugin-prettier'
-import { globalIgnores } from 'eslint/config'
+import eslint from "@eslint/js";
+import globals from "globals";
+import reactHooks from "eslint-plugin-react-hooks";
+import reactRefresh from "eslint-plugin-react-refresh";
+import tseslint from "typescript-eslint";
+import prettier from "eslint-config-prettier";
+import eslintPluginPrettier from "eslint-plugin-prettier";
+import { globalIgnores } from "eslint/config";
 
 export default tseslint.config([
-  globalIgnores(['dist']),
+  globalIgnores(["dist"]),
   {
-    files: ['**/*.{ts,tsx}'],
+    files: ["**/*.{ts,tsx}"],
     extends: [
       eslint.configs.recommended,
       tseslint.configs.stylisticTypeChecked,
@@ -22,8 +22,8 @@ export default tseslint.config([
             tsconfigRootDir: import.meta.dirname,
           },
         },
-      },      
-      reactHooks.configs['recommended-latest'],
+      },
+      reactHooks.configs["recommended-latest"],
       reactRefresh.configs.vite,
       prettier,
       {
@@ -31,7 +31,7 @@ export default tseslint.config([
           prettier: eslintPluginPrettier,
         },
         rules: {
-          'prettier/prettier': 'error', // show Prettier violations as lint errors
+          "prettier/prettier": "error", // show Prettier violations as lint errors
         },
       },
     ],
@@ -40,4 +40,4 @@ export default tseslint.config([
       globals: globals.browser,
     },
   },
-])
+]);

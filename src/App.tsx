@@ -5,7 +5,16 @@ import { useDisclosure, useViewportSize } from "@mantine/hooks";
 import { useColorScheme } from "./hooks/useColorScheme";
 import { useHabits } from "./contexts/HabitsContext";
 import { IconPlus, IconSettings, IconSun, IconMoon } from "@tabler/icons-react";
-import { AppShell, Button, em, Flex, Grid, Group, Text, Loader } from "@mantine/core";
+import {
+  AppShell,
+  Button,
+  em,
+  Flex,
+  Grid,
+  Group,
+  Text,
+  Loader,
+} from "@mantine/core";
 import { ActionButton } from "./components/Buttons/ActionButton";
 import { SelectedHabit } from "./components/Drawers/SelectedHabit";
 import { HabitItem } from "./components/HabitItem";
@@ -25,11 +34,15 @@ export const App = () => {
   const [currentDate, setCurrentDate] = useState(dayjs().format("YYYY-MM-DD"));
   const [selectedHabitId, setSelectedHabitId] = useState<number | null>(null);
 
-  const [addHabitOpened, { open: openAddHabit, close: closeAddHabit }] = useDisclosure(false);
+  const [addHabitOpened, { open: openAddHabit, close: closeAddHabit }] =
+    useDisclosure(false);
   const [habitStyle, toggleHabitStyle] = useHabitStyle();
-  const { colorScheme, themeTextColor, themeBorderColor, toggleColorScheme } = useColorScheme();
-  const [settingsOpened, { open: openSettings, close: closeSettings }] = useDisclosure(false);
-  const [habitOpened, { open: openHabit, close: closeHabit }] = useDisclosure(false);
+  const { colorScheme, themeTextColor, themeBorderColor, toggleColorScheme } =
+    useColorScheme();
+  const [settingsOpened, { open: openSettings, close: closeSettings }] =
+    useDisclosure(false);
+  const [habitOpened, { open: openHabit, close: closeHabit }] =
+    useDisclosure(false);
 
   const openHabitDrawer = (habitId: number) => {
     const foundHabit = habits.find((h) => h.id === habitId);

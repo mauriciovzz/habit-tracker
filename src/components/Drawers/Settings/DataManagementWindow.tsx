@@ -1,6 +1,10 @@
 import { Stack } from "@mantine/core";
 import { SettingsButton } from "./SettingsButton";
-import { IconFileDownload, IconFileUpload, IconTrash } from "@tabler/icons-react";
+import {
+  IconFileDownload,
+  IconFileUpload,
+  IconTrash,
+} from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
 
 interface DataManagementWindowProps {

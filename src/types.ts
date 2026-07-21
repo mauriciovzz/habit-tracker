@@ -14,7 +14,10 @@ export type HabitCretionProps = Omit<
   "id" | "position" | "currentStreak" | "bestStreak" | "logs"
 >;
 
-export type HabitUpdateProps = Omit<Habit, "position" | "currentStreak" | "bestStreak" | "logs">;
+export type HabitUpdateProps = Omit<
+  Habit,
+  "position" | "currentStreak" | "bestStreak" | "logs"
+>;
 
 export interface Log {
   habitId: number;

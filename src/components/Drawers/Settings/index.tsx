@@ -29,9 +29,19 @@ const HeaderTransition = ({
   trans: MantineTransition;
   text: string;
 }) => (
-  <Transition mounted={mounted} transition={trans} duration={200} timingFunction="ease">
+  <Transition
+    mounted={mounted}
+    transition={trans}
+    duration={200}
+    timingFunction="ease"
+  >
     {(styles) => (
-      <Text size="xl" fw={500} ta="left" style={{ ...styles, position: "absolute", width: "100%" }}>
+      <Text
+        size="xl"
+        fw={500}
+        ta="left"
+        style={{ ...styles, position: "absolute", width: "100%" }}
+      >
         {text}
       </Text>
     )}
@@ -47,7 +57,12 @@ const BodyTransition = ({
   trans: MantineTransition;
   body: ReactNode;
 }) => (
-  <Transition mounted={mounted} transition={trans} duration={200} timingFunction="ease">
+  <Transition
+    mounted={mounted}
+    transition={trans}
+    duration={200}
+    timingFunction="ease"
+  >
     {(styles) => (
       <Box
         style={{
@@ -92,8 +107,10 @@ export const Settings = ({
   const bodyHeight = drawerBodyHeight ?? 0;
 
   const { downloadData, uploadData, deleteData } = useHabits();
-  const [deleteOpened, { open: openDelete, close: closeDelete }] = useDisclosure(false);
-  const [uploadOpened, { open: openUpload, close: closeUpload }] = useDisclosure(false);
+  const [deleteOpened, { open: openDelete, close: closeDelete }] =
+    useDisclosure(false);
+  const [uploadOpened, { open: openUpload, close: closeUpload }] =
+    useDisclosure(false);
 
   const [file, setFile] = useState<File | null>(null);
 
@@ -118,19 +135,35 @@ export const Settings = ({
         p="md"
         h="80px"
         align="center"
-        style={{ borderBottom: `1px solid ${themeBorderColor}`, position: "relative" }}
+        style={{
+          borderBottom: `1px solid ${themeBorderColor}`,
+          position: "relative",
+        }}
       >
         <Flex
           align="center"
-          style={{ flex: 1, position: "relative", overflow: "hidden", height: "100%" }}
+          style={{
+            flex: 1,
+            position: "relative",
+            overflow: "hidden",
+            height: "100%",
+          }}
         >
-          <HeaderTransition mounted={view === "menu"} trans="slide-right" text={t("settings")} />
+          <HeaderTransition
+            mounted={view === "menu"}
+            trans="slide-right"
+            text={t("settings")}
+          />
           <HeaderTransition
             mounted={view === "reorder"}
             trans="slide-left"
             text={t("reorderHabits")}
           />
-          <HeaderTransition mounted={view === "data"} trans="slide-left" text={t("manageData")} />
+          <HeaderTransition
+            mounted={view === "data"}
+            trans="slide-left"
+            text={t("manageData")}
+          />
         </Flex>
 
         <TextButton
@@ -147,7 +180,13 @@ export const Settings = ({
         />
       </Flex>
 
-      <Box p={0} pos="relative" h={bodyHeight - 80} w="100%" style={{ overflow: "hidden" }}>
+      <Box
+        p={0}
+        pos="relative"
+        h={bodyHeight - 80}
+        w="100%"
+        style={{ overflow: "hidden" }}
+      >
         <BodyTransition
           mounted={view === "menu"}
           trans="slide-right"
@@ -163,7 +202,12 @@ export const Settings = ({
         <BodyTransition
           mounted={view === "reorder"}
           trans="slide-left"
-          body={<HabitReorderWindow originalHabits={habits} isMobile={isMobile ?? false} />}
+          body={
+            <HabitReorderWindow
+              originalHabits={habits}
+              isMobile={isMobile ?? false}
+            />
+          }
         />
         <BodyTransition
           mounted={view === "data"}
@@ -213,7 +257,12 @@ export const Settings = ({
           styles={{ label: { fontSize: 16 } }}
         />
 
-        <FileInput value={file} onChange={setFile} accept="application/json" clearable />
+        <FileInput
+          value={file}
+          onChange={setFile}
+          accept="application/json"
+          clearable
+        />
 
         <Divider my="md" />
 
