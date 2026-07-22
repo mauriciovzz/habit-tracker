@@ -10,9 +10,9 @@ import { HabitsProvider } from "./contexts/HabitsContext";
 import { App } from "./App.tsx";
 
 const updateSW = registerSW({
-  async onNeedRefresh() {
+  onNeedRefresh() {
     if (confirm("New version available.")) {
-      await updateSW(true);
+      void updateSW(true);
     }
   },
   onOfflineReady() {
