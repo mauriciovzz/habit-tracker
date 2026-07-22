@@ -104,7 +104,7 @@ export const App = () => {
             </Text>
           </Flex>
         ) : (
-          <Grid gutter="md" columns={isMobile ? 1 : 3}>
+          <Grid gap="md" columns={isMobile ? 1 : 3}>
             {habits.map((h) => (
               <Grid.Col key={h.id} span={1}>
                 <HabitItem

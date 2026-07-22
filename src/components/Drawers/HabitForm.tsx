@@ -164,7 +164,7 @@ export const HabitForm = ({
 
           <Grid
             grow
-            gutter={isMobile ? (width - 32 - 42 * 7) / 6 : "md"}
+            gap={isMobile ? (width - 32 - 42 * 7) / 6 : "md"}
             columns={7}
             px="md"
           >
