@@ -1,14 +1,13 @@
 import { ActionIcon } from "@mantine/core";
-import type { Icon, IconProps } from "@tabler/icons-react";
+import type { TablerIcon } from "@tabler/icons-react";
 import { useColorScheme } from "../../hooks/useColorScheme";
 
 interface HeaderTypes {
   toggle: () => void;
-  icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<Icon>>;
+  icon: TablerIcon;
 }
 
-export const ActionButton = ({ toggle, icon }: HeaderTypes) => {
-  const ButtonIcon = icon;
+export const ActionButton = ({ toggle, icon: ButtonIcon }: HeaderTypes) => {
   const { colorScheme } = useColorScheme();
 
   return (
