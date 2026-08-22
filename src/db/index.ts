@@ -1,9 +1,9 @@
-// db.ts
-import Dexie, { type Table } from "dexie";
-import type { Habit, Log } from "../types";
+import Dexie, { type EntityTable, type Table } from "dexie";
+
+import type { Habit, Log } from "@/types";
 
 class HabitTrackerDB extends Dexie {
-  habits!: Table<Habit, number>;
+  habits!: EntityTable<Habit, "id">;
   logs!: Table<Log, [number, string]>;
 
   constructor() {
@@ -15,4 +15,6 @@ class HabitTrackerDB extends Dexie {
   }
 }
 
-export const db = new HabitTrackerDB();
+const db = new HabitTrackerDB();
+
+export default db;

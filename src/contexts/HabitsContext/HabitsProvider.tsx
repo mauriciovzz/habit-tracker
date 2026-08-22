@@ -1,101 +1,206 @@
-import { type ReactNode, useState, useEffect } from "react";
-import type {
-  Habit,
-  HabitCretionProps,
-  HabitUpdateProps,
-  Log,
-} from "../../types";
-import habitsService from "../../services/habitsService";
+import { type ReactNode, useState, useEffect, useMemo } from "react";
+import { Center, Loader } from "@mantine/core";
+
 import { HabitsContext } from "./HabitsContext";
+import { habitsService } from "@/services";
+
+import type { Habit, HabitProps, Log, ISODate } from "@/types";
+import { MainLayout } from "@/layouts";
 
 export const HabitsProvider = ({ children }: { children: ReactNode }) => {
-  const [habits, setHabits] = useState<Habit[]>([]);
-  const [loadingHabits, setLoadingHabits] = useState(true);
+  const [habits, setHabits] = useState<Habit[] | null>(null);
+  const [logs, setLogs] = useState<Log[] | null>(null);
 
-  const getHabits = async () => {
-    await habitsService.updateAllStreaks();
-    await habitsService.getAll().then(setHabits);
-  };
+  const fetchData = async () => {
+    try {
+      const [fetchedHabits, fetchedLogs] = await Promise.all([
+        habitsService.getHabits(),
+        habitsService.getLogs(),
+      ]);
 
-  useEffect(() => {
-    void getHabits();
-    setTimeout(() => {
-      setLoadingHabits(false);
-    }, 250);
-  }, []);
-
-  const addHabit = async (data: HabitCretionProps) => {
-    const newHabit = await habitsService.add(data);
-    setHabits((prev) => [...prev, newHabit]);
-  };
-
-  const updateHabit = async (data: HabitUpdateProps) => {
-    const updatedHabit = await habitsService.update(data);
-    if (updatedHabit) {
-      setHabits((prev) =>
-        prev.map((h) => (h.id === data.id ? updatedHabit : h)),
-      );
+      setHabits(fetchedHabits);
+      setLogs(fetchedLogs);
+    } catch {
+      setHabits([]);
+      setLogs([]);
     }
   };
 
-  const updateHabitPosition = async (
-    habitId: number,
-    fromPosition: number,
-    toPosition: number,
-  ) => {
-    await habitsService.updatePosition(habitId, fromPosition, toPosition);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void fetchData();
+  }, []);
 
-    const updated = [...habits];
+  const logsByHabit = useMemo(() => {
+    if (!logs) return new Map<number, Log[]>();
 
-    const habitIndex = updated.findIndex((h) => h.id === habitId);
+    const map = new Map<number, Log[]>();
 
-    if (habitIndex === -1) return;
+    for (const log of logs) {
+      const habitLogs = map.get(log.habitId);
 
-    const [moved] = updated.splice(fromPosition, 1);
-    updated.splice(toPosition, 0, moved);
+      if (habitLogs) {
+        habitLogs.push(log);
+      } else {
+        map.set(log.habitId, [log]);
+      }
+    }
+
+    return map;
+  }, [logs]);
+
+  const addHabit = async (data: HabitProps) => {
+    const habit = await habitsService.createHabit(data);
+    setHabits((prev) => (prev ? [...prev, habit] : [habit]));
+  };
+
+  const updateHabit = async (id: number, data: HabitProps) => {
+    const habit = habits?.find((h) => h.id === id);
+    if (!habit) return;
+
+    const updatedHabit = await habitsService.updateHabit(habit, data);
 
     setHabits(
-      updated.map((h, index) => ({
-        ...h,
-        position: index,
-      })),
+      (prev) =>
+        prev?.map((h) => (h.id === updatedHabit.id ? updatedHabit : h)) ?? null,
     );
   };
 
-  const resetHabit = async (habitId: number) => {
-    await habitsService.reset(habitId);
-    setHabits((prev) =>
-      prev.map((h) =>
-        h.id === habitId
-          ? { ...h, logs: [], bestStreak: 0, currentStreak: 0 }
-          : h,
-      ),
-    );
-  };
+  const updateHabitPosition = async (id: number, newPos: number) => {
+    const habit = habits?.find((h) => h.id === id);
+    if (!habit || habit.position === newPos) return;
 
-  const deleteHabit = async (habitId: number) => {
-    const updatedHabits = await habitsService.remove(habitId);
+    const updatedHabits = await habitsService.updateHabitPosition(
+      habit.id,
+      habit.position,
+      newPos,
+    );
+
     setHabits(updatedHabits);
   };
 
-  const updateLog = async (habit: Habit, date: string) => {
-    const updatedData = await habitsService.updateHabitLog(habit, date);
+  const deleteHabit = async (habit: Habit) => {
+    const updatedHabits = await habitsService.deleteHabit(habit);
 
-    setHabits((prev) =>
-      prev.map((h) =>
-        h.id === habit.id
-          ? {
-              ...h,
-              logs: habit.logs.some((l) => l.date === date)
-                ? habit.logs.map((l) => (l.date === date ? updatedData.log : l))
-                : [...habit.logs, updatedData.log],
-              currentStreak: updatedData.currentStreak,
-              bestStreak: updatedData.bestStreak,
-            }
-          : h,
-      ),
+    setHabits(updatedHabits);
+    setLogs((prev) => prev?.filter((l) => l.habitId !== habit.id) ?? null);
+  };
+
+  const deleteHabitLogs = async (habit: Habit) => {
+    const updatedHabit = await habitsService.deleteLogs(habit);
+
+    setHabits(
+      (prev) =>
+        prev?.map((h) => (h.id === updatedHabit.id ? updatedHabit : h)) ?? null,
+    );
+
+    setLogs((prev) => prev?.filter((l) => l.habitId !== habit.id) ?? null);
+  };
+
+  const updateHabitInState = (updatedHabit: Habit) => {
+    setHabits(
+      (prev) =>
+        prev?.map((h) => (h.id === updatedHabit.id ? updatedHabit : h)) ?? null,
     );
   };
+
+  const incrementLog = async (habit: Habit, date: ISODate) => {
+    const { log, habit: updatedHabit } = await habitsService.incrementLog(
+      habit,
+      date,
+    );
+
+    updateHabitInState(updatedHabit);
+
+    setLogs((prev) => {
+      if (!prev) return [log];
+
+      const index = prev.findIndex(
+        (l) => l.habitId === log.habitId && l.date === log.date,
+      );
+
+      if (index === -1) return [...prev, log];
+
+      const updated = [...prev];
+      updated[index] = log;
+
+      return updated;
+    });
+  };
+
+  const decrementLog = async (habit: Habit, date: ISODate) => {
+    const { log, habit: updatedHabit } = await habitsService.decrementLog(
+      habit,
+      date,
+    );
+
+    setHabits(
+      (prev) =>
+        prev?.map((h) => (h.id === updatedHabit.id ? updatedHabit : h)) ?? null,
+    );
+
+    setLogs((prev) => {
+      if (!prev) return null;
+
+      if (!log) {
+        return prev.filter((l) => !(l.habitId === habit.id && l.date === date));
+      }
+
+      const index = prev.findIndex(
+        (l) => l.habitId === log.habitId && l.date === log.date,
+      );
+
+      if (index === -1) {
+        return [...prev, log];
+      }
+
+      const updated = [...prev];
+      updated[index] = log;
+
+      return updated;
+    });
+  };
+
+  const resetLog = async (habit: Habit, date: ISODate) => {
+    const { habit: updatedHabit } = await habitsService.resetLog(habit, date);
+
+    setHabits(
+      (prev) =>
+        prev?.map((h) => (h.id === updatedHabit.id ? updatedHabit : h)) ?? null,
+    );
+
+    setLogs((prev) => {
+      if (!prev) return null;
+
+      return prev.filter((l) => !(l.habitId === habit.id && l.date === date));
+    });
+  };
+
+  const fulfillLog = async (habit: Habit, date: ISODate) => {
+    const { log, habit: updatedHabit } = await habitsService.fulfillLog(
+      habit,
+      date,
+    );
+
+    updateHabitInState(updatedHabit);
+
+    setLogs((prev) => {
+      if (!prev) return [log];
+
+      const index = prev.findIndex(
+        (l) => l.habitId === log.habitId && l.date === log.date,
+      );
+
+      if (index === -1) return [...prev, log];
+
+      const updated = [...prev];
+      updated[index] = log;
+
+      return updated;
+    });
+  };
+
+  // data management
 
   const downloadData = async () => {
     const data = await habitsService.downloadData();
@@ -107,40 +212,56 @@ export const HabitsProvider = ({ children }: { children: ReactNode }) => {
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "habit-tracker-backup.json";
+    a.download = "habits-backup.json";
     a.click();
     URL.revokeObjectURL(url);
   };
 
+  const validateUpload = async (file: File) => {
+    await habitsService.readBackup(file);
+  };
+
   const uploadData = async (file: File) => {
-    const text = await file.text();
-
-    const data = JSON.parse(text) as {
-      habits: Habit[];
-      logs: Log[];
-    };
-
+    const data = await habitsService.readBackup(file);
     await habitsService.uploadData(data);
-    await getHabits();
+    await fetchData();
   };
 
   const deleteData = async () => {
     await habitsService.deleteData();
+
     setHabits([]);
+    setLogs([]);
   };
+
+  if (habits === null || logs === null) {
+    return (
+      <MainLayout>
+        <Center flex={1}>
+          <Loader color="var(--mantine-color-text)" size="md" />
+        </Center>
+      </MainLayout>
+    );
+  }
 
   return (
     <HabitsContext.Provider
       value={{
         habits,
-        loadingHabits,
         addHabit,
         updateHabit,
         updateHabitPosition,
-        resetHabit,
         deleteHabit,
-        updateLog,
+        deleteHabitLogs,
+
+        logsByHabit,
+        incrementLog,
+        decrementLog,
+        resetLog,
+        fulfillLog,
+
         downloadData,
+        validateUpload,
         uploadData,
         deleteData,
       }}

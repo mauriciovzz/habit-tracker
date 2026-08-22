@@ -2,10 +2,14 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { MantineProvider } from "@mantine/core";
 import { registerSW } from "virtual:pwa-register";
+import "./i18n";
+
 import "@mantine/core/styles.css";
 import "@mantine/charts/styles.css";
 import "@mantine/dates/styles.css";
-import "./i18n";
+import "@mantine/carousel/styles.css";
+import "./main.css";
+
 import { HabitsProvider } from "./contexts/HabitsContext";
 import { App } from "./App.tsx";
 
@@ -21,6 +25,7 @@ const updateSW = registerSW({
 });
 
 const rootElement = document.getElementById("root");
+
 if (rootElement) {
   createRoot(rootElement).render(
     <StrictMode>

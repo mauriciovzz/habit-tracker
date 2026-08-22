@@ -1,11 +1,15 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import tsconfigPaths from "vite-tsconfig-paths";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
-  base: "/habit-tracker/",
+  base: "",
   plugins: [
     react(),
+
+    tsconfigPaths(),
+
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
@@ -34,10 +38,7 @@ export default defineConfig({
           },
         ],
       },
-      workbox: {
-        globPatterns: ["**/*"],
-        navigateFallback: "/habit-tracker/index.html",
-      },
+      workbox: { globPatterns: ["**/*"], navigateFallback: "/index.html" },
       includeAssets: ["**/*"],
     }),
   ],
