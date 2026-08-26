@@ -129,6 +129,10 @@ export const SelectedHabit = ({ habit, logs, onClose }: Props) => {
   const calendarSquare = width / 7;
   const squareSpace = (calendarSquare - circleSize) / 2;
 
+  const weekdays = t("daysOfWeek", {
+    returnObjects: true,
+  }) as string[];
+
   return (
     <>
       <Paper style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -223,7 +227,7 @@ export const SelectedHabit = ({ habit, logs, onClose }: Props) => {
               size="sm"
               level="month"
               minLevel="month"
-              weekdayFormat="ddd"
+              weekdayFormat={(date) => weekdays[(dayjs(date).day() + 6) % 7]}
               styles={{
                 calendarHeader: { display: "none" },
                 calendarHeaderControl: { display: "none" },

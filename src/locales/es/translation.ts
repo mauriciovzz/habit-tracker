@@ -15,7 +15,7 @@ export const es = {
     total: "Total",
   },
 
-  daysOfWeek: ["Lun.", "Mar.", "Mié.", "Jue.", "Vie.", "Sab.", "Dom."],
+  daysOfWeek: ["Lun", "Mar", "Mié", "Jue", "Vie", "Sab", "Dom"],
 
   months: {
     full: [
@@ -92,6 +92,11 @@ export const es = {
   reorderHabitsPrompt: "Cambia el orden de tus hábitos",
   reorderHabitsDescription: "Arrastra un hábito para cambiar su posición",
   noHabitsReorder: "No hay habitos para reordenar",
+
+  upToDate: "La aplicación está actualizada",
+  upToDatePrompt: "Estás usando la versión más reciente",
+  updateAvailable: "Actualización disponible",
+  updateAvailablePrompt: "Haz clic para actualizar a la versión más reciente",
 
   lang: "Español",
 
@@ -176,17 +181,27 @@ export const es = {
         "Usa los botones de la parte inferior para cambiar entre <strong>modo claro y oscuro</strong> o entre <strong>inglés y español.</strong>",
     },
 
+    updates: {
+      heading: "Actualizar la Aplicación",
+      description:
+        "La aplicación busca nuevas versiones cuando abres Configuración. Si hay una actualización disponible, el botón <strong>Actualización disponible</strong> estará habilitado.",
+      update:
+        "Pulsa <strong>Actualización disponible</strong> para instalar la versión más reciente de la aplicación. La aplicación se recargará automáticamente después de la actualización.",
+      latest:
+        "Si la aplicación está actualizada, el botón de actualización estará deshabilitado y mostrará <strong>La aplicación está actualizada</strong>.",
+    },
+
     installation: {
       heading: "Instalar la Aplicación",
 
       android: {
         heading: "Android (Chrome)",
         steps: [
-          "Abre el juego en Google Chrome.",
+          "Abre la aplicación en Google Chrome.",
           "Toca el menú ⋮ (tres puntos) en la esquina superior derecha.",
           'Selecciona "Instalar aplicación" o "Agregar a la pantalla principal".',
           'Pulsa "Instalar" para confirmar.',
-          "El juego se añadirá a tu pantalla de inicio y podrás abrirlo como cualquier otra aplicación.",
+          "La aplicación se añadirá a tu pantalla de inicio y podrás abrirla como cualquier otra aplicación.",
         ],
         tips: "En algunos dispositivos Android, Chrome mostrará automáticamente un aviso para instalar la aplicación cuando esté disponible.",
       },
@@ -194,13 +209,24 @@ export const es = {
       ios: {
         heading: "iPhone y iPad (Safari)",
         steps: [
-          "Abre el juego en Safari.",
+          "Abre la aplicación en Safari.",
           "Toca el botón Compartir (el cuadrado con una flecha hacia arriba).",
           'Desplázate hacia abajo y selecciona "Agregar a pantalla de inicio".',
           "Si lo deseas, cambia el nombre de la aplicación.",
-          'Pulsa "Agregar". El juego aparecerá en tu pantalla de inicio y podrás abrirlo como una aplicación nativa.',
+          'Pulsa "Agregar". la aplicación aparecerá en tu pantalla de inicio y podrás abrirlo como una aplicación nativa.',
         ],
         tips: "En iPhone y iPad solo es posible instalar aplicaciones web desde Safari.",
+      },
+
+      desktop: {
+        heading: "Ordenador",
+        steps: [
+          "Abre la aplicación en un navegador compatible.",
+          "Busca el icono de instalación en la barra de direcciones.",
+          'Haz clic en el icono de instalación y selecciona "Instalar".',
+          "La aplicación se instalará y podrás abrirla como una aplicación de escritorio normal.",
+        ],
+        tips: "La opción de instalación puede aparecer de forma diferente según el navegador. Si no aparece una opción de instalación, es posible que tu navegador no sea compatible con la instalación de aplicaciones web.",
       },
     },
   },

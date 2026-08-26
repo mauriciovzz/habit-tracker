@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
+import { t } from "i18next";
 import {
   Flex,
   Group,
@@ -8,6 +8,7 @@ import {
   Divider,
   ScrollArea,
   Center,
+  useComputedColorScheme,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus, IconMenu2 } from "@tabler/icons-react";
@@ -27,12 +28,12 @@ import {
 } from "@/components";
 
 import type { Habit, ISODate, LogData } from "./types";
+import { usePWA } from "./contexts/PWAContext";
 
 export const App = () => {
-  const { t } = useTranslation();
-
   const { pastDates } = useCurrentDate();
   const { habits, logsByHabit, incrementLog } = useHabits();
+  const { checkForUpdate } = usePWA();
 
   const [selectedHabitId, setSelectedHabitId] = useState<number | null>(null);
   const [selectedLogData, setSelectedLog] = useState<LogData | undefined>(
@@ -46,6 +47,35 @@ export const App = () => {
   const [habitOpened, { open: openHabit, close: closeHabit }] =
     useDisclosure(false);
   const [logOpened, { open: openLog, close: closeLog }] = useDisclosure(false);
+
+  const modalOpened =
+    addHabitOpened || settingsOpened || habitOpened || logOpened;
+
+  const scheme = useComputedColorScheme("light");
+  const isDark = scheme === "dark";
+
+  useEffect(() => {
+    const meta = document.querySelector('meta[name="theme-color"]');
+
+    if (!meta) {
+      return;
+    }
+
+    let color: string;
+
+    if (modalOpened) {
+      color = isDark ? "#121212" : "#7f7f7f";
+    } else {
+      color = isDark ? "#242424" : "#fff";
+    }
+
+    meta.setAttribute("content", color);
+  }, [isDark, modalOpened]);
+
+  const openSettingsModal = () => {
+    openSettings();
+    void checkForUpdate();
+  };
 
   const openHabitModal = (id: number) => {
     setSelectedHabitId(id);
@@ -64,7 +94,7 @@ export const App = () => {
   return (
     <MainLayout>
       <Group pl={9} pr="xs" justify="space-between">
-        <AppActionIcon icon={IconMenu2} onClick={openSettings} />
+        <AppActionIcon icon={IconMenu2} onClick={openSettingsModal} />
 
         <AppActionIcon icon={IconPlus} onClick={openAddHabit} />
       </Group>

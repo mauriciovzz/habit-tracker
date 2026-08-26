@@ -1,11 +1,11 @@
 import { type ReactNode, useState, useEffect, useMemo } from "react";
 import { Center, Loader } from "@mantine/core";
 
-import { HabitsContext } from "./HabitsContext";
 import { habitsService } from "@/services";
+import { MainLayout } from "@/layouts";
+import { HabitsContext } from "./HabitsContext";
 
 import type { Habit, HabitProps, Log, ISODate } from "@/types";
-import { MainLayout } from "@/layouts";
 
 export const HabitsProvider = ({ children }: { children: ReactNode }) => {
   const [habits, setHabits] = useState<Habit[] | null>(null);

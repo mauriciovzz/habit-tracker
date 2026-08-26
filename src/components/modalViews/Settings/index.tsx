@@ -14,11 +14,13 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import {
   IconArrowsShuffle,
+  IconCheck,
   IconFileDownload,
   IconFileUpload,
   IconLanguage,
   IconMoon,
   IconQuestionMark,
+  IconRefresh,
   IconSun,
   IconTrash,
   type TablerIcon,
@@ -29,26 +31,30 @@ import { TextButton, ConfirmationModal } from "@/components";
 import { HabitReordering } from "./HabitReordering";
 import { FileUpload } from "./FileUpload";
 import { HelpModal } from "./Help";
+import { usePWA } from "@/contexts/PWAContext";
 
 export const SettingsButton = ({
   icon: SettingIcon,
   header,
   description,
+  disabled,
   onClick,
 }: {
   icon: TablerIcon;
   header: string;
-  description?: string;
+  description: string;
+  disabled?: boolean;
   onClick: () => void;
 }) => (
   <Button
-    onClick={onClick}
     variant="default"
     flex={1}
     h="100%"
     radius="md"
     p="xs"
     styles={{ inner: { justifyContent: "flex-start" } }}
+    disabled={disabled}
+    onClick={onClick}
   >
     <Group gap="xs" wrap="nowrap">
       <SettingIcon size={20} />
@@ -73,6 +79,7 @@ interface Props {
 
 export const Settings = ({ onClose }: Props) => {
   const { downloadData, deleteData } = useHabits();
+  const { updateAvailable, checkForUpdate, updateApp } = usePWA();
 
   const [reorderOpened, { open: openReorder, close: closeReorder }] =
     useDisclosure(false);
@@ -144,6 +151,22 @@ export const Settings = ({ onClose }: Props) => {
           header={t("deleteData")}
           description={t("DeleteDataPrompt")}
           onClick={openDelete}
+        />
+
+        <SettingsButton
+          icon={updateAvailable ? IconRefresh : IconCheck}
+          header={updateAvailable ? t("updateAvailable") : t("upToDate")}
+          description={
+            updateAvailable ? t("updateAvailablePrompt") : t("upToDatePrompt")
+          }
+          onClick={() => {
+            if (updateAvailable) {
+              void updateApp();
+            } else {
+              void checkForUpdate();
+            }
+          }}
+          disabled={!updateAvailable}
         />
 
         <Group gap="sm" w="100%">

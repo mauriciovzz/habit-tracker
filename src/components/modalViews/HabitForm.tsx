@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 import {
   TextInput,
   ColorSwatch,
@@ -54,7 +54,6 @@ interface Props {
 }
 
 export const HabitForm = ({ data, onClose }: Props) => {
-  const { t } = useTranslation();
   const { addHabit, updateHabit } = useHabits();
 
   const { ref: focusRef, focused } = useFocusWithin();

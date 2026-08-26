@@ -29,7 +29,8 @@ const SLIDES = [
   { key: "habitDetails", text: "help.habitDetails.heading", page: 4 },
   { key: "managingHabits", text: "help.managingHabits.heading", page: 5 },
   { key: "settings", text: "help.settings.heading", page: 6 },
-  { key: "installation", text: "help.installation.heading", page: 7 },
+  { key: "updates", text: "help.updates.heading", page: 7 },
+  { key: "installation", text: "help.installation.heading", page: 8 },
 ];
 
 const Slide = ({ children }: { children: ReactNode }) => (
@@ -204,6 +205,14 @@ export const HelpModal = ({ opened, onClose }: Props) => {
           </Slide>
 
           <Slide>
+            <SlideTitle text={"help.updates.heading"} />
+
+            <SlideParagraph text="help.updates.description" />
+            <SlideParagraph text="help.updates.update" />
+            <SlideParagraph text="help.updates.latest" />
+          </Slide>
+
+          <Slide>
             <SlideTitle text={t("help.installation.heading")} />
 
             <SegmentedControl
@@ -215,6 +224,10 @@ export const HelpModal = ({ opened, onClose }: Props) => {
               data={[
                 { label: "iOS", value: "ios" },
                 { label: "Android", value: "android" },
+                {
+                  label: t("help.installation.desktop.heading"),
+                  value: "desktop",
+                },
               ]}
             />
 

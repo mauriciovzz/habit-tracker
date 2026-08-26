@@ -90,6 +90,11 @@ export const en = {
   reorderHabitsDescription: "Drag an habit to change it's position",
   noHabitsReorder: "No habits to reorder",
 
+  upToDate: "App is up to date",
+  upToDatePrompt: "You are using the latest version",
+  updateAvailable: "Update available",
+  updateAvailablePrompt: "Click to update to the newest version",
+
   lang: "English",
 
   help: {
@@ -173,17 +178,27 @@ export const en = {
         "Use the buttons at the bottom to switch between <strong>light and dark mode</strong> or between <strong>English and Spanish.</strong>",
     },
 
+    updates: {
+      heading: "Updating the Application",
+      description:
+        "The application checks for new versions when you open Settings. If an update is available, the <strong>Update available</strong> button will be enabled.",
+      update:
+        "Tap <strong>Update available</strong> to install the newest version of the application. The app will reload automatically after the update.",
+      latest:
+        "If the application is up to date, the update button will be disabled and show <strong>App is up to date</strong>.",
+    },
+
     installation: {
       heading: "Install the App",
 
       android: {
         heading: "Android (Chrome)",
         steps: [
-          "Open the game in Google Chrome.",
+          "Open the app in Google Chrome.",
           "Tap the ⋮ (three dots) menu in the top-right corner.",
           'Select "Install app" or "Add to Home screen".',
           'Tap "Install" to confirm.',
-          "The game will be added to your home screen and can be launched like any other app.",
+          "The app will be added to your home screen and can be launched like any other app.",
         ],
         tips: "On some Android devices, Chrome may automatically display an Install banner when the app is available.",
       },
@@ -191,13 +206,24 @@ export const en = {
       ios: {
         heading: "iPhone & iPad (Safari)",
         steps: [
-          "Open the game in Safari.",
+          "Open the app in Safari.",
           "Tap the Share button (the square with an upward arrow).",
           'Scroll down and tap "Add to Home Screen".',
           "Optionally, edit the app name.",
-          'Tap "Add". The game will appear on your home screen and can be opened like a native app.',
+          'Tap "Add". The app will appear on your home screen and can be opened like a native app.',
         ],
         tips: "Installing the app on iOS only works in Safari.",
+      },
+
+      desktop: {
+        heading: "Desktop",
+        steps: [
+          "Open the application in a supported browser.",
+          "Look for the install icon in the address bar.",
+          'Click the install icon and select "Install".',
+          "The application will be installed and you can open it like a regular desktop application.",
+        ],
+        tips: "The installation option may look different depending on your browser. If you don't see an install option, your browser may not support installing the application.",
       },
     },
   },

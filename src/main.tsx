@@ -1,7 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { MantineProvider } from "@mantine/core";
-import { registerSW } from "virtual:pwa-register";
 import "./i18n";
 
 import "@mantine/core/styles.css";
@@ -11,18 +10,9 @@ import "@mantine/carousel/styles.css";
 import "./main.css";
 
 import { HabitsProvider } from "./contexts/HabitsContext";
-import { App } from "./App.tsx";
+import { PWAProvider } from "./contexts/PWAContext";
 
-const updateSW = registerSW({
-  onNeedRefresh() {
-    if (confirm("New version available.")) {
-      void updateSW(true);
-    }
-  },
-  onOfflineReady() {
-    console.log("app ready to work offline");
-  },
-});
+import { App } from "./App.tsx";
 
 const rootElement = document.getElementById("root");
 
@@ -31,7 +21,9 @@ if (rootElement) {
     <StrictMode>
       <MantineProvider>
         <HabitsProvider>
-          <App />
+          <PWAProvider>
+            <App />
+          </PWAProvider>
         </HabitsProvider>
       </MantineProvider>
     </StrictMode>,

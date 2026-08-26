@@ -13,6 +13,7 @@ const RotateDeviceOverlay = () => (
     h="100%"
     w="100%"
     pos="fixed"
+    bdrs={0}
     style={{
       zIndex: 99999,
       display: "flex",
@@ -57,7 +58,7 @@ export const MainLayout = ({ children }: Props) => {
       w="100%"
       h="100dvh"
       gap={0}
-      p="sm"
+      p="12px 12px 34px 12px"
       justify="center"
       align="center"
       pos="relative"
@@ -81,7 +82,9 @@ export const MainLayout = ({ children }: Props) => {
           overflow: "hidden",
         }}
       >
-        {children}
+        <Stack flex={1} mih={0} gap="sm" hidden={shouldRotate}>
+          {children}
+        </Stack>
 
         {shouldRotate && <RotateDeviceOverlay />}
       </Stack>

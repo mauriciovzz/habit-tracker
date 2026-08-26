@@ -1,5 +1,6 @@
 import { Button, Divider, Center, Group, Text } from "@mantine/core";
-import { useTranslation } from "react-i18next";
+import { t } from "i18next";
+
 import { AppModal } from "./AppModal";
 
 interface Props {
@@ -17,8 +18,6 @@ export const ConfirmationModal = ({
   onConfirm,
   onCancel,
 }: Props) => {
-  const { t } = useTranslation();
-
   const confirm = () => {
     onConfirm();
     onCancel();

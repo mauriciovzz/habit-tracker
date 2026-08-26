@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import { Modal, Stack } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
@@ -21,7 +21,7 @@ export const AppModal = ({ opened, onClose, height, children }: Props) => {
       trapFocus={false}
       styles={{
         inner: {
-          padding: 12,
+          padding: "12px 12px 34px 12px",
           display: "flex",
           alignItems: isMobile ? "flex-end" : undefined,
         },
@@ -30,16 +30,24 @@ export const AppModal = ({ opened, onClose, height, children }: Props) => {
           maxHeight: "calc(100dvh - 24px)",
         },
       }}
-      transitionProps={{
-        transition: isMobile ? "slide-up" : "pop",
-        duration: 300,
-        exitDuration: 300,
-        timingFunction: "linear",
-      }}
     >
-      <Modal.Overlay backgroundOpacity={0.5} blur={2.5} />
+      <Modal.Overlay
+        backgroundOpacity={0.5}
+        blur={2.5}
+        transitionProps={{
+          duration: 0,
+        }}
+      />
 
-      <Modal.Content radius="lg">
+      <Modal.Content
+        radius="lg"
+        transitionProps={{
+          transition: isMobile ? "slide-up" : "pop",
+          duration: 300,
+          exitDuration: 300,
+          timingFunction: "linear",
+        }}
+      >
         <Modal.Body p="sm">
           <Stack h={height ?? undefined} gap="sm">
             {children}
