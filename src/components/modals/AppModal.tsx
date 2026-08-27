@@ -37,6 +37,7 @@ export const AppModal = ({ opened, onClose, height, children }: Props) => {
         transitionProps={{
           duration: 0,
         }}
+        className="instant-overlay"
       />
 
       <Modal.Content

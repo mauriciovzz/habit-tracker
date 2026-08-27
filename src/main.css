@@ -22,3 +22,8 @@ body {
     display: flex !important;
   }
 }
+
+.instantOverlay {
+  transition: none !important;
+  animation: none !important;
+}
