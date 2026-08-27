@@ -19,6 +19,12 @@ export const AppModal = ({ opened, onClose, height, children }: Props) => {
       onClose={onClose}
       centered={!isMobile}
       trapFocus={false}
+      transitionProps={{
+        transition: isMobile ? "slide-up" : "pop",
+        duration: 300,
+        exitDuration: 300,
+        timingFunction: "linear",
+      }}
       styles={{
         inner: {
           padding: "12px 12px 34px 12px",
@@ -31,27 +37,9 @@ export const AppModal = ({ opened, onClose, height, children }: Props) => {
         },
       }}
     >
-      <Modal.Overlay
-        backgroundOpacity={0.5}
-        blur={2}
-        bdrs="lg"
-        transitionProps={{
-          transition: "fade",
-          duration: 290,
-          exitDuration: 290,
-          timingFunction: "ease",
-        }}
-      />
+      <Modal.Overlay backgroundOpacity={0.5} blur={2} bdrs="lg" />
 
-      <Modal.Content
-        radius="lg"
-        transitionProps={{
-          transition: isMobile ? "slide-up" : "pop",
-          duration: 300,
-          exitDuration: 300,
-          timingFunction: "linear",
-        }}
-      >
+      <Modal.Content radius="lg">
         <Modal.Body p="sm">
           <Stack h={height ?? undefined} gap="sm">
             {children}
