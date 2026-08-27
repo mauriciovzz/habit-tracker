@@ -37,9 +37,16 @@ export const AppModal = ({ opened, onClose, height, children }: Props) => {
         },
       }}
     >
-      <Modal.Overlay backgroundOpacity={0.5} blur={2} bdrs="lg" />
+      <Modal.Overlay
+        backgroundOpacity={0.5}
+        blur={5}
+        bdrs={isMobile ? "16px 16px 0 0" : undefined}
+      />
 
-      <Modal.Content radius="lg">
+      <Modal.Content
+        radius="lg"
+        bd="1px solid var(--mantine-color-default-border)"
+      >
         <Modal.Body p="sm">
           <Stack h={height ?? undefined} gap="sm">
             {children}
