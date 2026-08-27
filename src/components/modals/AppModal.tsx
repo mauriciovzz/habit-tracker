@@ -7,9 +7,10 @@ interface Props {
   opened: boolean;
   onClose: () => void;
   children: ReactNode;
+  height?: string | number;
 }
 
-export const AppModal = ({ opened, onClose, children }: Props) => {
+export const AppModal = ({ opened, onClose, height, children }: Props) => {
   const isMobile = useMediaQuery(`(max-width: 30em)`);
 
   return (
@@ -50,7 +51,9 @@ export const AppModal = ({ opened, onClose, children }: Props) => {
         }}
       >
         <Modal.Body p="sm">
-          <Stack gap="sm">{children}</Stack>
+          <Stack h={height ?? undefined} gap="sm">
+            {children}
+          </Stack>
         </Modal.Body>
       </Modal.Content>
     </Modal.Root>
