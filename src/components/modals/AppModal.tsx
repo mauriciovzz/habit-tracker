@@ -34,6 +34,7 @@ export const AppModal = ({ opened, onClose, height, children }: Props) => {
       <Modal.Overlay
         backgroundOpacity={0.5}
         blur={2}
+        bdrs="lg"
         transitionProps={{
           transition: "fade",
           duration: 290,
