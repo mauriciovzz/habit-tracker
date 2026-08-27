@@ -35,8 +35,8 @@ export const AppModal = ({ opened, onClose, height, children }: Props) => {
         backgroundOpacity={0.5}
         transitionProps={{
           transition: "fade",
-          duration: 350,
-          exitDuration: 350,
+          duration: 290,
+          exitDuration: 290,
           timingFunction: "ease",
         }}
       />

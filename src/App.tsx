@@ -65,7 +65,7 @@ export const App = () => {
     if (isLandscape || !modalOpened) {
       meta.setAttribute("content", isDark ? "#242424" : "#fff");
     } else {
-      meta.setAttribute("content", isDark ? "#121212" : "#7f7f7f");
+      meta.setAttribute("content", isDark ? "#121212" : "#7F7F7F");
     }
   }, [isDark, modalOpened, isLandscape]);
 
