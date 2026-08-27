@@ -96,7 +96,7 @@ export const es = {
   upToDate: "La aplicación está actualizada",
   upToDatePrompt: "Estás usando la versión más reciente",
   updateAvailable: "Actualización disponible",
-  updateAvailablePrompt: "Haz clic para actualizar a la versión más reciente",
+  updateAvailablePrompt: "Haz clic para actualizar",
 
   lang: "Español",
 

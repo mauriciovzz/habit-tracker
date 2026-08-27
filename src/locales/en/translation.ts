@@ -93,7 +93,7 @@ export const en = {
   upToDate: "App is up to date",
   upToDatePrompt: "You are using the latest version",
   updateAvailable: "Update available",
-  updateAvailablePrompt: "Click to update to the newest version",
+  updateAvailablePrompt: "Click to update",
 
   lang: "English",
 
