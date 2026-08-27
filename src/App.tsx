@@ -10,7 +10,7 @@ import {
   Center,
   useComputedColorScheme,
 } from "@mantine/core";
-import { useDisclosure, useMediaQuery } from "@mantine/hooks";
+import { useDisclosure } from "@mantine/hooks";
 import { IconPlus, IconMenu2 } from "@tabler/icons-react";
 import dayjs from "dayjs";
 
@@ -53,8 +53,6 @@ export const App = () => {
   const scheme = useComputedColorScheme("light");
   const isDark = scheme === "dark";
 
-  const isLandscape = useMediaQuery("(orientation: landscape)");
-
   useEffect(() => {
     const meta = document.querySelector('meta[name="theme-color"]');
 
@@ -62,12 +60,8 @@ export const App = () => {
       return;
     }
 
-    if (isLandscape || !modalOpened) {
-      meta.setAttribute("content", isDark ? "#242424" : "#fff");
-    } else {
-      meta.setAttribute("content", isDark ? "#121212" : "#7F7F7F");
-    }
-  }, [isDark, modalOpened, isLandscape]);
+    meta.setAttribute("content", isDark ? "#242424" : "#fff");
+  }, [isDark, modalOpened]);
 
   const openSettingsModal = () => {
     openSettings();
