@@ -16,7 +16,6 @@ import dayjs from "dayjs";
 
 import { useHabits } from "@/contexts/HabitsContext";
 import { useCurrentDate } from "@/hooks";
-import { MainLayout } from "@/layouts";
 import {
   AppActionIcon,
   HabitItem,
@@ -92,7 +91,7 @@ export const App = () => {
   }) as string[];
 
   return (
-    <MainLayout>
+    <>
       <Group pl={9} pr="xs" justify="space-between">
         <AppActionIcon icon={IconMenu2} onClick={openSettingsModal} />
 
@@ -177,6 +176,6 @@ export const App = () => {
           onClose={closeLog}
         />
       </AppModal>
-    </MainLayout>
+    </>
   );
 };

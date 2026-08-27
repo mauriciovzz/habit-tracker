@@ -12,6 +12,7 @@ import "./main.css";
 import { HabitsProvider } from "./contexts/HabitsContext";
 import { PWAProvider } from "./contexts/PWAContext";
 
+import { MainLayout } from "./layouts/MainLayout.tsx";
 import { App } from "./App.tsx";
 
 const rootElement = document.getElementById("root");
@@ -20,11 +21,13 @@ if (rootElement) {
   createRoot(rootElement).render(
     <StrictMode>
       <MantineProvider>
-        <HabitsProvider>
-          <PWAProvider>
-            <App />
-          </PWAProvider>
-        </HabitsProvider>
+        <MainLayout>
+          <HabitsProvider>
+            <PWAProvider>
+              <App />
+            </PWAProvider>
+          </HabitsProvider>
+        </MainLayout>
       </MantineProvider>
     </StrictMode>,
   );

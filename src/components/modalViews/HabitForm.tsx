@@ -56,6 +56,7 @@ interface Props {
 export const HabitForm = ({ data, onClose }: Props) => {
   const { addHabit, updateHabit } = useHabits();
 
+  const inputRef = useRef<HTMLInputElement>(null);
   const { ref: focusRef, focused } = useFocusWithin();
   const errorTimeoutRef = useRef<number | null>(null);
 
@@ -154,12 +155,16 @@ export const HabitForm = ({ data, onClose }: Props) => {
             return;
           }
 
+          inputRef.current?.blur();
           void handleFormSubmit(form.values);
         }}
         style={{ display: "flex", flexDirection: "column", gap: 12 }}
       >
         <TextInput
-          ref={focusRef}
+          ref={(node) => {
+            focusRef(node);
+            inputRef.current = node;
+          }}
           radius="md"
           size="md"
           placeholder={t("name")}

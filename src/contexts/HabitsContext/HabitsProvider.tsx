@@ -2,7 +2,6 @@ import { type ReactNode, useState, useEffect, useMemo } from "react";
 import { Center, Loader } from "@mantine/core";
 
 import { habitsService } from "@/services";
-import { MainLayout } from "@/layouts";
 import { HabitsContext } from "./HabitsContext";
 
 import type { Habit, HabitProps, Log, ISODate } from "@/types";
@@ -236,11 +235,9 @@ export const HabitsProvider = ({ children }: { children: ReactNode }) => {
 
   if (habits === null || logs === null) {
     return (
-      <MainLayout>
-        <Center flex={1}>
-          <Loader color="var(--mantine-color-text)" size="md" />
-        </Center>
-      </MainLayout>
+      <Center flex={1}>
+        <Loader color="var(--mantine-color-text)" size="md" />
+      </Center>
     );
   }
 

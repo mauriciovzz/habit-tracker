@@ -12,3 +12,13 @@ body {
   overflow: hidden;
   overscroll-behavior: none;
 }
+
+@media (orientation: landscape) and (max-height: 480px) {
+  .app-content {
+    visibility: hidden;
+  }
+
+  .rotate-device-overlay {
+    display: flex !important;
+  }
+}
