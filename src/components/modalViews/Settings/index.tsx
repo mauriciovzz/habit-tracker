@@ -9,7 +9,6 @@ import {
   Button,
   useMantineColorScheme,
   useComputedColorScheme,
-  Center,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
@@ -17,7 +16,6 @@ import {
   IconCheck,
   IconFileDownload,
   IconFileUpload,
-  IconLanguage,
   IconMoon,
   IconQuestionMark,
   IconRefresh,
@@ -170,33 +168,21 @@ export const Settings = ({ onClose }: Props) => {
         />
 
         <Group gap="sm" w="100%">
-          <Button w="28%" variant="default" onClick={toggleColor}>
+          <Button flex={1} variant="default" onClick={toggleColor}>
             {isDark ? <IconSun size={20} /> : <IconMoon size={20} />}
           </Button>
 
           <Button
             flex={1}
             variant="default"
-            p={8}
-            styles={{
-              label: {
-                disĺay: "flex",
-                gap: 6,
-                width: "100%",
-              },
-            }}
             onClick={() => {
               void toggleLang();
             }}
           >
-            <IconLanguage size={20} />
-
-            <Divider orientation="vertical" />
-
-            <Center flex={1}>{t("lang")}</Center>
+            {t("lang")}
           </Button>
 
-          <Button variant="default" w="28%" onClick={openHelp}>
+          <Button variant="default" flex={1} onClick={openHelp}>
             <IconQuestionMark size={20} />
           </Button>
         </Group>
@@ -204,7 +190,7 @@ export const Settings = ({ onClose }: Props) => {
 
       <ConfirmationModal
         opened={deleteOpened}
-        message={t("DeleteDataQuestion")}
+        message="DeleteDataQuestion"
         color="red.8"
         onConfirm={() => {
           void deleteData();

@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useMemo } from "react";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import { Box, Flex, ScrollArea, Stack, Text } from "@mantine/core";
 import { Heatmap } from "@mantine/charts";
 import dayjs from "dayjs";
@@ -16,6 +16,8 @@ const RECT_SIZE = 10;
 const CELL_GAP = 1;
 
 export const HabitHeatmap = ({ habit: { color, reps }, logs }: Props) => {
+  const { t } = useTranslation();
+
   const colors = chroma
     .scale([chroma(color).brighten(2), color])
     .mode("lab")

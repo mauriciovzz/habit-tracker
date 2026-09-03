@@ -8,7 +8,7 @@ import {
   Button,
   Text,
 } from "@mantine/core";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 import { useHabits } from "@/contexts/HabitsContext";
 import { AppModal, TextButton } from "@/components";
@@ -18,7 +18,9 @@ interface Props {
   onClose: () => void;
   closeSettings: () => void;
 }
+
 export const FileUpload = ({ opened, onClose, closeSettings }: Props) => {
+  const { t } = useTranslation();
   const { validateUpload, uploadData } = useHabits();
 
   const [importConfirmed, setImportConfirmed] = useState<boolean | null>(null);

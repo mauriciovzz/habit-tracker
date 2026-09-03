@@ -6,6 +6,9 @@ export const es = {
   rotateDesc:
     "Esta app está diseñada para usarse en modo vertical en pantallas pequeñas",
 
+  windowHeight: "Ventana demasiado pequeña",
+  windowHeightDesc: "Amplía la ventana para continuar",
+
   edit: "Editar",
   back: "Volver",
 

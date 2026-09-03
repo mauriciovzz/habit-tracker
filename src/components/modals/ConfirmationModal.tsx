@@ -1,5 +1,5 @@
 import { Button, Divider, Center, Group, Text } from "@mantine/core";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 import { AppModal } from "./AppModal";
 
@@ -18,6 +18,8 @@ export const ConfirmationModal = ({
   onConfirm,
   onCancel,
 }: Props) => {
+  const { t } = useTranslation();
+
   const confirm = () => {
     onConfirm();
     onCancel();
@@ -27,7 +29,7 @@ export const ConfirmationModal = ({
     <AppModal opened={opened} onClose={onCancel}>
       <Center h={33} bg={color} bdrs="md">
         <Text c="white" fw={700}>
-          {message}
+          {t(message)}
         </Text>
       </Center>
 

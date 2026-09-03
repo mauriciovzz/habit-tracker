@@ -13,12 +13,29 @@ body {
   overscroll-behavior: none;
 }
 
-@media (orientation: landscape) and (max-height: 480px) {
-  .app-content {
-    visibility: hidden;
-  }
+/* Mobile padding */
 
-  .rotate-device-overlay {
-    display: flex !important;
+.mobile-padding {
+  padding: 12px;
+}
+
+@media (max-width: 480px) and (not (display-mode: standalone)) {
+  .mobile-padding {
+    padding-bottom: 34px;
   }
+}
+
+/* Supress mobile long press */
+
+.mantine-Button-root,
+.mantine-Text-root,
+.mantine-Group-root,
+.mantine-Divider-root,
+.mantine-ColorSwatch-root,
+.mantine-FileInput-root,
+.mantine-Calendar-root,
+.mantine-Calendar-weekday {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-touch-callout: none !important;
 }

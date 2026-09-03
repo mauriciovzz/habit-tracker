@@ -27,7 +27,6 @@ export const AppModal = ({ opened, onClose, height, children }: Props) => {
       }}
       styles={{
         inner: {
-          padding: "12px 12px 34px 12px",
           display: "flex",
           alignItems: isMobile ? "flex-end" : undefined,
         },
@@ -35,6 +34,9 @@ export const AppModal = ({ opened, onClose, height, children }: Props) => {
           marginInline: isMobile ? 12 : 0,
           maxHeight: "calc(100dvh - 24px)",
         },
+      }}
+      classNames={{
+        inner: "mobile-padding",
       }}
     >
       <Modal.Overlay

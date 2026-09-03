@@ -6,6 +6,9 @@ export const en = {
   rotateDesc:
     "This app is designed to be used in portrait mode on smaller screens",
 
+  windowHeight: "Window too small",
+  windowHeightDesc: "Make the window taller to continue",
+
   edit: "Edit",
   back: "Back",
 

@@ -303,7 +303,7 @@ export const SelectedHabit = ({ habit, logs, onClose }: Props) => {
 
       <ConfirmationModal
         opened={resetOpened}
-        message={t("resetPrompt")}
+        message="resetPrompt"
         color={color}
         onConfirm={() => {
           void deleteHabitLogs(habit);
@@ -313,7 +313,7 @@ export const SelectedHabit = ({ habit, logs, onClose }: Props) => {
 
       <ConfirmationModal
         opened={deleteOpened}
-        message={t("deletePrompt")}
+        message="deletePrompt"
         color={color}
         onConfirm={() => {
           onClose();

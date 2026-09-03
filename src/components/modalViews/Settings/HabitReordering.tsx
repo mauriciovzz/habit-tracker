@@ -27,7 +27,7 @@ import {
   useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import { IconGripVertical } from "@tabler/icons-react";
 
 import { useHabits } from "@/contexts/HabitsContext";
@@ -97,6 +97,7 @@ interface Props {
 }
 
 export const HabitReordering = ({ opened, onClose }: Props) => {
+  const { t } = useTranslation();
   const { habits, updateHabitPosition } = useHabits();
 
   const [reorderHabits, setReorderHabits] = useState<Habit[]>(habits);

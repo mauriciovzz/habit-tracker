@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import {
   Flex,
   Group,
@@ -30,6 +30,7 @@ import type { Habit, ISODate, LogData } from "./types";
 import { usePWA } from "./contexts/PWAContext";
 
 export const App = () => {
+  const { t } = useTranslation();
   const { pastDates } = useCurrentDate();
   const { habits, logsByHabit, incrementLog } = useHabits();
   const { checkForUpdate } = usePWA();

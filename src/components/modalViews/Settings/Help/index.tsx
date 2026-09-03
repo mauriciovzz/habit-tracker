@@ -10,7 +10,7 @@ import {
   Button,
   SegmentedControl,
 } from "@mantine/core";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import { Carousel } from "@mantine/carousel";
 import type { EmblaCarouselType } from "embla-carousel";
 import {
@@ -65,6 +65,7 @@ interface Props {
 }
 
 export const HelpModal = ({ opened, onClose }: Props) => {
+  const { t } = useTranslation();
   const { colorScheme } = useMantineColorScheme();
 
   const [embla, setEmbla] = useState<EmblaCarouselType | null>(null);
