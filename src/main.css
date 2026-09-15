@@ -43,7 +43,7 @@ body {
 
 @media (max-width: 480px) and (display-mode: standalone) {
   .mobile-padding {
-    padding-bottom: 46px;
+    padding-bottom: 34px;
   }
 }
 
