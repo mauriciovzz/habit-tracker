@@ -13,15 +13,37 @@ body {
   overscroll-behavior: none;
 }
 
+/* Mobile landscape */
+@media (pointer: coarse) and (orientation: landscape) {
+  .app-content {
+    visibility: hidden;
+  }
+
+  .rotate-device-overlay {
+    display: flex !important;
+  }
+}
+
+/* Desktop window too short */
+@media (not (pointer: coarse)) and (max-height: 630px) {
+  .app-content {
+    visibility: hidden;
+  }
+
+  .resize-window-overlay {
+    display: flex !important;
+  }
+}
+
 /* Mobile padding */
 
 .mobile-padding {
   padding: 12px;
 }
 
-@media (max-width: 480px) and (not (display-mode: standalone)) {
+@media (max-width: 480px) and (display-mode: standalone) {
   .mobile-padding {
-    padding-bottom: 34px;
+    padding-bottom: 46px;
   }
 }
 

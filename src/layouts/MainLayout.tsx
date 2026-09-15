@@ -1,7 +1,6 @@
 import { useEffect, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Group, Paper, Stack, Text } from "@mantine/core";
-import { useMediaQuery, useViewportSize } from "@mantine/hooks";
 import {
   IconDeviceMobileRotated,
   IconArrowNarrowRightDashed,
@@ -18,7 +17,7 @@ const RotateDeviceOverlay = () => {
       bdrs={0}
       style={{
         zIndex: 99999,
-        display: "flex",
+        display: "none",
         flexDirection: "column",
         gap: 12,
         alignItems: "center",
@@ -54,13 +53,14 @@ const ResizeWindowOverlay = () => {
       bdrs={0}
       style={{
         zIndex: 99999,
-        display: "flex",
+        display: "none",
         flexDirection: "column",
         gap: 12,
         alignItems: "center",
         justifyContent: "center",
         inset: 0,
       }}
+      className="resize-window-overlay"
     >
       <IconArrowAutofitHeight size={32} />
 
@@ -81,14 +81,6 @@ interface Props {
 }
 
 export const MainLayout = ({ children }: Props) => {
-  const { width, height } = useViewportSize();
-
-  const isMobile = useMediaQuery("(pointer: coarse)");
-  const isLandscape = width > height;
-
-  const shouldRotate = isMobile && isLandscape;
-  const shouldResize = !isMobile && height < 630;
-
   useEffect(() => {
     const isStandalone = window.matchMedia(
       "(display-mode: standalone)",
@@ -138,12 +130,13 @@ export const MainLayout = ({ children }: Props) => {
           overflow: "hidden",
         }}
       >
-        <Stack flex={1} mih={0} gap="sm" hidden={shouldRotate || shouldResize}>
+        <Stack flex={1} mih={0} gap="sm" className="app-content">
           {children}
         </Stack>
 
-        {shouldRotate && <RotateDeviceOverlay />}
-        {shouldResize && <ResizeWindowOverlay />}
+        <RotateDeviceOverlay />
+
+        <ResizeWindowOverlay />
       </Stack>
     </Stack>
   );
