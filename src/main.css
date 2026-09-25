@@ -25,7 +25,7 @@ body {
 }
 
 /* Desktop window too short */
-@media (not (pointer: coarse)) and (max-height: 630px) {
+@media (not (pointer: coarse)) and (max-height: 629px) {
   .app-content {
     visibility: hidden;
   }
@@ -36,7 +36,6 @@ body {
 }
 
 /* Mobile padding */
-
 .mobile-padding {
   padding: 12px;
 }
@@ -48,7 +47,6 @@ body {
 }
 
 /* Supress mobile long press */
-
 .mantine-Button-root,
 .mantine-Text-root,
 .mantine-Group-root,
